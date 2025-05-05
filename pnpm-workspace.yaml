@@ -1,0 +1,8 @@
+packages:
+  - playground
+  - docs
+  - packages/*
+  - examples/*
+
+onlyBuiltDependencies:
+  - rolldown
