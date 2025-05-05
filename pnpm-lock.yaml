@@ -6,6 +6,7 @@ settings:
 
 overrides:
   vite: ^6.1.4
+  tsdown: link:../tsdown
 
 importers:
 
@@ -48,12 +49,18 @@ importers:
       simple-git-hooks:
         specifier: ^2.12.1
         version: 2.13.0
+      tsdown:
+        specifier: link:../tsdown
+        version: link:../tsdown
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
       unbuild:
         specifier: ^3.5.0
         version: 3.5.0(sass@1.87.0)(typescript@5.8.3)(vue-sfc-transformer@0.1.14(@vue/compiler-core@3.5.13)(esbuild@0.25.3)(vue@3.5.13(typescript@5.8.3)))(vue-tsc@2.2.10(typescript@5.8.3))(vue@3.5.13(typescript@5.8.3))
+      unplugin-vue:
+        specifier: ^6.2.0
+        version: 6.2.0(@types/node@22.15.3)(jiti@2.4.2)(sass@1.87.0)(tsx@4.19.1)(vue@3.5.13(typescript@5.8.3))(yaml@2.7.1)
       vite:
         specifier: ^6.1.4
         version: 6.3.4(@types/node@22.15.3)(jiti@2.4.2)(sass@1.87.0)(tsx@4.19.1)(yaml@2.7.1)
@@ -3762,6 +3769,16 @@ packages:
     resolution: {integrity: sha512-8U/MtpkPkkk3Atewj1+RcKIjb5WBimZ/WSLhhR3w6SsIj8XJuKTacSP8g+2JhfSGw0Cb125Y+2zA/IzJZDVbhA==}
     engines: {node: '>=18.12.0'}
 
+  unplugin-vue@6.2.0:
+    resolution: {integrity: sha512-/FRiRuBu8AFzeF9qetgMLrDJtBGvJTOn/TqA0DiURIYT8IMAttXajjMO7UM2oK07R5ZX3mFW+OGe/reYEq9wSQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      vue: ^3.2.25
+
+  unplugin@2.3.2:
+    resolution: {integrity: sha512-3n7YA46rROb3zSj8fFxtxC/PqoyvYQ0llwz9wtUPUutr9ig09C8gGo5CWCwHrUzlqC1LLR43kxp5vEIyH1ac1w==}
+    engines: {node: '>=18.12.0'}
+
   unrs-resolver@1.7.2:
     resolution: {integrity: sha512-BBKpaylOW8KbHsu378Zky/dGh4ckT/4NW/0SHRABdqRLcQJ2dAOjDo9g97p04sWflm0kqPqpUatxReNV/dqI5A==}
 
@@ -3943,6 +3960,9 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  webpack-virtual-modules@0.6.2:
+    resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
 
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
@@ -8101,6 +8121,33 @@ snapshots:
       pathe: 2.0.3
       picomatch: 4.0.2
 
+  unplugin-vue@6.2.0(@types/node@22.15.3)(jiti@2.4.2)(sass@1.87.0)(tsx@4.19.1)(vue@3.5.13(typescript@5.8.3))(yaml@2.7.1):
+    dependencies:
+      '@vue/reactivity': 3.5.13
+      debug: 4.4.0
+      unplugin: 2.3.2
+      vite: 6.3.4(@types/node@22.15.3)(jiti@2.4.2)(sass@1.87.0)(tsx@4.19.1)(yaml@2.7.1)
+      vue: 3.5.13(typescript@5.8.3)
+    transitivePeerDependencies:
+      - '@types/node'
+      - jiti
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - tsx
+      - yaml
+
+  unplugin@2.3.2:
+    dependencies:
+      acorn: 8.14.1
+      picomatch: 4.0.2
+      webpack-virtual-modules: 0.6.2
+
   unrs-resolver@1.7.2:
     dependencies:
       napi-postinstall: 0.2.3
@@ -8374,6 +8421,8 @@ snapshots:
       '@vue/shared': 3.5.13
     optionalDependencies:
       typescript: 5.8.3
+
+  webpack-virtual-modules@0.6.2: {}
 
   which@2.0.2:
     dependencies:
