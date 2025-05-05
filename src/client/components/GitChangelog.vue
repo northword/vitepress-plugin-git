@@ -69,7 +69,7 @@ const [active, toggleActive] = useToggle()
   </template>
 </template>
 
-<style lang="scss">
+<style>
 :root {
   --changelog-bg: var(--vp-c-bg-alt);
   --changelog-font-size: 0.875rem;
@@ -85,18 +85,18 @@ const [active, toggleActive] = useToggle()
   font-size: var(--changelog-font-size);
   line-height: 1.7;
   transition: background-color var(--vp-t-color);
+}
 
-  &.active {
-    padding-block: 0 0.5rem;
-  }
+.vp-changelog-wrapper.active {
+  padding-block: 0 0.5rem;
+}
 
-  a {
-    text-decoration: none !important;
+.vp-changelog-wrapper a {
+  text-decoration: none !important;
+}
 
-    &::after {
-      display: none !important;
-    }
-  }
+.vp-changelog-wrapper a::after {
+  display: none !important;
 }
 
 .vp-changelog-header {
@@ -106,14 +106,16 @@ const [active, toggleActive] = useToggle()
   padding-block: 1rem;
   font-weight: bold;
   cursor: pointer;
+}
 
-  @media (max-width: 419px) {
+@media (max-width: 419px) {
+  .vp-changelog-header {
     flex-wrap: wrap;
   }
+}
 
-  .vp-changelog-wrapper.active & {
-    padding-block-end: 0.5rem;
-  }
+.vp-changelog-wrapper.active .vp-changelog-header {
+  padding-block-end: 0.5rem;
 }
 
 .vp-changelog-icon,
@@ -144,10 +146,10 @@ const [active, toggleActive] = useToggle()
   margin-block: 0.5rem;
   padding-inline-start: 0;
   list-style: none;
+}
 
-  .vp-changelog-wrapper.active & {
-    display: block;
-  }
+.vp-changelog-wrapper.active .vp-changelog-list {
+  display: block;
 }
 
 .vp-changelog-item-tag,
@@ -155,25 +157,27 @@ const [active, toggleActive] = useToggle()
   position: relative;
   margin-block-start: 8px;
   padding-inline-start: 20px;
+}
 
-  &:first-child {
-    margin-block-start: 0;
-  }
+.vp-changelog-item-tag:first-child,
+.vp-changelog-item-commit:first-child {
+  margin-block-start: 0;
+}
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 0;
-    display: inline-block;
-    width: 1.25em;
-    height: 1.25em;
-    background-color: currentcolor;
-    color: var(--vp-c-text-subtle);
-    mask: var(--icon) no-repeat;
-    mask-size: 100% 100%;
-    transition: color var(--vp-t-color);
-  }
+.vp-changelog-item-tag::before,
+.vp-changelog-item-commit::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 0;
+  display: inline-block;
+  width: 1.25em;
+  height: 1.25em;
+  background-color: currentcolor;
+  color: var(--vp-c-text-subtle);
+  mask: var(--icon) no-repeat;
+  mask-size: 100% 100%;
+  transition: color var(--vp-t-color);
 }
 
 .vp-changelog-item-commit::before {
@@ -187,11 +191,11 @@ const [active, toggleActive] = useToggle()
 .vp-changelog-tag {
   margin-inline-end: 4px;
   text-decoration: none;
+}
 
-  code {
-    font-weight: 500;
-    font-size: 14px;
-  }
+.vp-changelog-tag code {
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .vp-changelog-hash {
