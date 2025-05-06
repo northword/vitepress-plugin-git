@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-import { GitPageData } from 'vitepress-plugin-git'
+import { GitPageDataTransfromer } from 'vitepress-plugin-git'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -31,10 +31,11 @@ export default defineConfig({
   vite: {
     plugins: [
       // Inspect(),
+      // GitPlugin(),
     ],
   },
 
   async transformPageData(pageData, ctx) {
-    await GitPageData(pageData, ctx, {})
+    await GitPageDataTransfromer(pageData, ctx)
   },
 })

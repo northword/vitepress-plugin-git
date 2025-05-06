@@ -1,6 +1,5 @@
 import type { Buffer } from 'node:buffer'
 import type { GitContributorInfo } from '../../shared'
-import type { GitPluginOptions } from '../options'
 import type { MergedRawCommit, RawCommit } from '../typings'
 import { spawn } from 'node:child_process'
 import { logger } from './logger'
@@ -16,22 +15,6 @@ function getCoAuthorsFromCommitBody(body: string): Pick<GitContributorInfo, 'ema
         email: email.trim(),
       }))
     : []
-}
-
-function getGitLogFormat({
-  contributors,
-  changelog,
-}: GitPluginOptions): string {
-  if (!contributors && !changelog)
-    // hash | author_date
-    return ['%H', '%ad'].join(INFO_SPLITTER)
-
-  if (contributors && !changelog)
-    // hash | author_date | author_name | author_email | body
-    return ['%H', '%ad', '%an', '%ae', '%b'].join(INFO_SPLITTER)
-
-  // hash | author_date | author_name | author_email | body | subject | ref
-  return ['%H', '%ad', '%an', '%ae', '%b', '%s', '%d'].join(INFO_SPLITTER)
 }
 
 /**
@@ -82,8 +65,8 @@ function runGitLog(args: string[], cwd: string): Promise<string> {
  *
  * @see {@link https://git-scm.com/docs/pretty-formats | documentation} for details.
  */
-export async function getRawCommits(filepath: string, cwd: string, options: GitPluginOptions): Promise<RawCommit[]> {
-  const format = getGitLogFormat(options)
+export async function getRawCommits(filepath: string, cwd: string): Promise<RawCommit[]> {
+  const format = ['%H', '%ad', '%an', '%ae', '%b', '%s', '%d'].join(INFO_SPLITTER)
 
   try {
     const stdout = await runGitLog(
@@ -148,10 +131,10 @@ export function mergeRawCommits(commits: RawCommit[]): MergedRawCommit[] {
   return result
 }
 
-export async function getCommits(filepaths: string[], cwd: string, options: GitPluginOptions): Promise<MergedRawCommit[]> {
+export async function getCommits(filepaths: string[], cwd: string): Promise<MergedRawCommit[]> {
   const rawCommits = (
     await Promise.all(
-      filepaths.map(filepath => getRawCommits(filepath, cwd, options)),
+      filepaths.map(filepath => getRawCommits(filepath, cwd)),
     )
   ).flat()
 

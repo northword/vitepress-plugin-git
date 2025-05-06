@@ -6,10 +6,10 @@ import { resolveChangelog } from './resolveChangelog'
 import { resolveContributors } from './resolveContributors'
 import { checkGitRepo, getCommits, inferGitProvider } from './utils'
 
-export async function GitPageData(
+export async function GitPageDataTransfromer(
   page: PageData,
   context: TransformPageContext,
-  options: GitPluginOptions,
+  options: GitPluginOptions = {},
 ) {
   // Init the page.git as an empty object,
   // if one feature is enabled, we add the property to the page.git,
@@ -50,15 +50,12 @@ export async function GitPageData(
   ]
 
   // Collect the raw commits for this page
-  const commits = await getCommits(filePaths, cwd, {
-    contributors: (frontmatter.contributors ?? contributors) !== false,
-    changelog: frontmatter.changelog ?? changelog,
-  })
+  const commits = await getCommits(filePaths, cwd)
 
   if (commits.length === 0) {
     page.git = {
-      createdTime: 0,
-      updatedTime: 0,
+      createdTime: -1,
+      updatedTime: -1,
       contributors: [],
       changelog: [],
     }
@@ -66,11 +63,11 @@ export async function GitPageData(
   }
 
   if (isEnableCreatedTime) {
-    page.git.createdTime = commits[commits.length - 1]?.time ?? 0
+    page.git.createdTime = commits[commits.length - 1]?.time ?? -1
   }
 
   if (isEnableUpdatedTime) {
-    page.git.updatedTime = commits[0]?.time ?? 0
+    page.git.updatedTime = commits[0]?.time ?? -1
   }
 
   const contributorsOptions = typeof contributors === 'object' ? contributors : {}

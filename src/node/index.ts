@@ -1,4 +1,5 @@
 export type * from '../shared'
+// export * from './gitPlugin'
 export type * from './options'
 export * from './pageData'
 export * from './resolveChangelog'
