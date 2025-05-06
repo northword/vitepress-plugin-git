@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { useToggle } from '@vueuse/core'
-import { useChangelog, useLastUpdated } from '../composables'
+import { useChangelog, useLastUpdated, useLocale } from '../composables'
 import VPHeader from './VPHeader.vue'
 
 const changelog = useChangelog()
 const lastUpdated = useLastUpdated()
+const locale = useLocale()
 const [active, toggleActive] = useToggle()
 </script>
 
 <template>
-  <VPHeader
-    anchor="doc-changelog"
-    text="Changelog"
-  />
+  <VPHeader anchor="doc-changelog" :text="locale.changelog" />
   <template v-if="changelog.length">
     <div class="vp-changelog-wrapper" :class="{ active }">
       <div class="vp-changelog-header" @click="toggleActive()">
@@ -22,7 +20,7 @@ const [active, toggleActive] = useToggle()
         </div>
         <div>
           <span class="vp-changelog-menu-icon" />
-          <span>{{ "viewChangelog" }}</span>
+          <span>{{ locale.viewChangelog }}</span>
         </div>
       </div>
 

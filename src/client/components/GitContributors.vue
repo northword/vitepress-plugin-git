@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { useContributors } from '../composables'
+import { useContributors, useLocale } from '../composables'
 import GitContributor from './GitContributor.vue'
 import VPHeader from './VPHeader.vue'
 
 const contributors = useContributors()
+const locale = useLocale()
 </script>
 
 <template>
-  <VPHeader anchor="git-contributors" text="contributors" />
+  <VPHeader anchor="git-contributors" :text="locale.contributors" />
   <template v-if="contributors.length">
     <div class="vp-contributors">
       <GitContributor

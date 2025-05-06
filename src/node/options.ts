@@ -1,5 +1,5 @@
-import type { LocaleConfig, PageData } from 'vitepress'
-import type { GitContributorInfo, GitLocaleData } from '../shared'
+import type { PageData } from 'vitepress'
+import type { GitContributorInfo } from '../shared'
 
 /**
  * Contributor information
@@ -205,14 +205,7 @@ export interface GitPluginOptions {
    *
    * 是否收集页面的变更历史记录
    *
-   * @default false
+   * @default true
    */
   changelog?: ChangelogOptions | boolean
-
-  /**
-   * Localization config
-   *
-   * 本地化配置
-   */
-  locales?: LocaleConfig<GitLocaleData>
 }
