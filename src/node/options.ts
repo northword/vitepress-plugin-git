@@ -1,5 +1,6 @@
 import type { PageData } from 'vitepress'
 import type { GitContributorInfo } from '../shared'
+import type { MergedRawCommit } from './typings'
 
 /**
  * Contributor information
@@ -109,6 +110,8 @@ export interface ChangelogOptions {
    * Maximum number of changelog
    *
    * 最大变更记录条数
+   *
+   * @default 100
    */
   maxCount?: number
 
@@ -117,7 +120,7 @@ export interface ChangelogOptions {
    *
    * git 仓库的访问地址，例如：https://github.com/vuepress/ecosystem
    */
-  repoUrl?: string
+  repoUrl?: string | ((commit: MergedRawCommit) => string | undefined | void)
 
   /**
    * Commit url pattern

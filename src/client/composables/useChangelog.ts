@@ -26,29 +26,6 @@ export function useChangelog(): ComputedRef<GitChangelogItem[]> {
         ...item,
       }
 
-      // if (pattern.issue && repo) {
-      //   res.message = res.message.replace(
-      //     RE_ISSUE,
-      //     (matched, issue: string) => {
-      //       const url = pattern
-      //         .issue!.replace(':issue', issue)
-      //         .replace(':repo', repo)
-      //       return `<a href="${url}" target="_blank" rel="noopener noreferrer">${matched}</a>`
-      //     },
-      //   )
-      // }
-
-      // if (pattern.commit && repo) {
-      //   res.commitUrl = pattern.commit
-      //     .replace(':hash', res.hash)
-      //     .replace(':repo', repo)
-      // }
-
-      // if (pattern.tag && repo && res.tag)
-      //   res.tagUrl = pattern.tag
-      //     .replace(':tag', res.tag)
-      //     .replace(':repo', repo)
-
       return res
     })
   })
