@@ -79,6 +79,11 @@ export interface GitChangelogInfo {
   coAuthors?: CoAuthorInfo[]
 }
 
+export interface GitPageData {
+  git: GitData
+  frontmatter: GitFrontmatter
+}
+
 export interface GitData {
   /**
    * Unix timestamp in milliseconds of the first commit
@@ -101,31 +106,10 @@ export interface GitData {
   changelog?: GitChangelogInfo[]
 }
 
-export interface GitLocaleData {
-  /**
-   * Contributors title
-   */
-  contributors: string
-
-  /**
-   * Changelog title
-   */
-  changelog: string
-
-  /**
-   * Word to represent a commit "on" a time
-   */
-  timeOn: string
-
-  /**
-   * Changelog button
-   */
-  viewChangelog: string
-
-  /**
-   * Latest updated
-   */
-  latestUpdateAt: string
+export interface GitFrontmatter {
+  contributors: boolean
+  changelog: boolean
+  gitInclude: string[]
 }
 
 export interface GitUrlPattern {
