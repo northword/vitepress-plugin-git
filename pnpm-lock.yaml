@@ -23,6 +23,9 @@ importers:
       '@vueuse/core':
         specifier: ^13.1.0
         version: 13.1.0(vue@3.5.13(typescript@5.8.3))
+      vitepress:
+        specifier: ^1.6.3
+        version: 1.6.3(@algolia/client-search@5.24.0)(@types/node@22.15.3)(jiti@2.4.2)(postcss@8.5.3)(sass@1.87.0)(search-insights@2.16.3)(tsx@4.19.1)(typescript@5.8.3)(yaml@2.7.1)
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^4.11.0
@@ -60,9 +63,6 @@ importers:
       vite-plugin-dts:
         specifier: ^4.5.3
         version: 4.5.3(@types/node@22.15.3)(rollup@4.40.1)(typescript@5.8.3)(vite@6.3.4(@types/node@22.15.3)(jiti@2.4.2)(sass@1.87.0)(tsx@4.19.1)(yaml@2.7.1))
-      vitepress:
-        specifier: ^1.6.3
-        version: 1.6.3(@algolia/client-search@5.24.0)(@types/node@22.15.3)(jiti@2.4.2)(postcss@8.5.3)(sass@1.87.0)(search-insights@2.16.3)(tsx@4.19.1)(typescript@5.8.3)(yaml@2.7.1)
       vitest:
         specifier: ^3.1.1
         version: 3.1.2(@types/debug@4.1.12)(@types/node@22.15.3)(jiti@2.4.2)(sass@1.87.0)(tsx@4.19.1)(yaml@2.7.1)

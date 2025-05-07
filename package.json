@@ -38,7 +38,8 @@
   "scripts": {
     "dev": "unbuild --stub",
     "build": "unbuild",
-    "lint": "eslint .",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix",
     "release": "bumpp",
     "test": "vitest",
     "typecheck": "vue-tsc --noEmit",
