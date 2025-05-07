@@ -10,17 +10,45 @@ function parseTagName(refs: string): string | undefined {
   if (!refs)
     return
 
-  const tags = refs
+  const tag = refs
     .replace(RE_CLEAN_REFS, '')
     .split(',')
     .map(tag => tag.trim())
+    .find(tag => tag.includes('tag:'))
 
-  return tags[0]?.includes('tag:') ? tags[0].replace('tag:', '').trim() : ''
+  return tag?.replace('tag:', '').trim() || ''
 }
 
-export function resolveChangelog(commits: MergedRawCommit[], options: ChangelogOptions, contributors: ContributorInfo[]): GitChangelogInfo[] {
-  const result: GitChangelogInfo[] = []
+function resolveRepoUrl(repoUrl: ChangelogOptions['repoUrl'], commit: MergedRawCommit): string | undefined {
+  if (typeof repoUrl === 'function')
+    return repoUrl(commit) ?? undefined
+  if (typeof repoUrl === 'string')
+    return repoUrl
+  return undefined
+}
 
+function replaceIssueLinks(message: string, repo: string, issueUrlPattern: string): string {
+  return message.replace(RE_ISSUE, (matched, issue: string) => {
+    const url = issueUrlPattern
+      .replace(':issue', issue)
+      .replace(':repo', repo)
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${matched}</a>`
+  })
+}
+
+function resolveCommitUrl(repo: string, hash: string, pattern: string): string {
+  return pattern.replace(':hash', hash).replace(':repo', repo)
+}
+
+function resolveTagUrl(repo: string, tag: string, pattern: string): string {
+  return pattern.replace(':tag', tag).replace(':repo', repo)
+}
+
+export function resolveChangelog(
+  commits: MergedRawCommit[],
+  options: ChangelogOptions,
+  contributors: ContributorInfo[],
+): GitChangelogInfo[] {
   const {
     maxCount = 100,
     repoUrl,
@@ -29,9 +57,7 @@ export function resolveChangelog(commits: MergedRawCommit[], options: ChangelogO
     tagUrlPattern = ':repo/releases/tag/:tag',
   } = options
 
-  const sliceCommits = commits.slice(0, maxCount)
-
-  for (const commit of sliceCommits) {
+  return commits.slice(0, maxCount).map((commit) => {
     const { hash, message, time, author, email, refs, coAuthors } = commit
     const tag = parseTagName(refs)
     const contributor = getContributorInfo(
@@ -53,40 +79,15 @@ export function resolveChangelog(commits: MergedRawCommit[], options: ChangelogO
     if (tag)
       resolved.tag = tag
 
-    const repo: string | undefined = typeof repoUrl === 'function'
-      ? repoUrl(commit) ?? undefined
-      : typeof repoUrl === 'string'
-        ? repoUrl
-        : undefined
+    const repo = resolveRepoUrl(repoUrl, commit)
 
     if (repo) {
-      if (issueUrlPattern) {
-        resolved.message = resolved.message.replace(
-          RE_ISSUE,
-          (matched, issue: string) => {
-            const url = issueUrlPattern
-              .replace(':issue', issue)
-              .replace(':repo', repo)
-            return `<a href="${url}" target="_blank" rel="noopener noreferrer">${matched}</a>`
-          },
-        )
-      }
-
-      if (commitUrlPattern) {
-        resolved.commitUrl = commitUrlPattern
-          .replace(':hash', hash)
-          .replace(':repo', repo)
-      }
-
-      if (tagUrlPattern && tag) {
-        resolved.tagUrl = tagUrlPattern
-          .replace(':tag', tag)
-          .replace(':repo', repo)
-      }
+      resolved.message = replaceIssueLinks(resolved.message, repo, issueUrlPattern)
+      resolved.commitUrl = resolveCommitUrl(repo, hash, commitUrlPattern)
+      if (tag)
+        resolved.tagUrl = resolveTagUrl(repo, tag, tagUrlPattern)
     }
 
-    result.push(resolved)
-  }
-
-  return result
+    return resolved
+  })
 }
