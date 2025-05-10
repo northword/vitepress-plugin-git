@@ -1,11 +1,16 @@
-import type { Buffer } from 'node:buffer'
 import type { GitContributorInfo } from '../../shared'
 import type { MergedRawCommit, RawCommit } from '../typings'
-import { spawn } from 'node:child_process'
+import { basename, dirname } from 'node:path'
 import { logger } from './logger'
+import { run } from './process'
 
-const INFO_SPLITTER = '[|]'
-const COMMIT_SPLITTER = '\\|/'
+/**
+ * This regular expression is used to match and parse commit messages that contain multiple author information.
+ *
+ * @see {@link https://regex101.com/r/q5YB8m/1 | Regexp demo}
+ * @see {@link https://en.wikipedia.org/wiki/Email_address#Local-part | Email address}
+ * @see {@link https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors | Creating a commit with multiple authors in GitHub}
+ */
 const RE_CO_AUTHOR = /^ *Co-authored-by: ?([^<]*)<([^>]*)> */gim
 
 function getCoAuthorsFromCommitBody(body: string): Pick<GitContributorInfo, 'email' | 'name'>[] {
@@ -18,102 +23,85 @@ function getCoAuthorsFromCommitBody(body: string): Pick<GitContributorInfo, 'ema
 }
 
 /**
- * Helper function to run git command using spawn and return stdout as a promise.
- * Rejects if the git command exits with a non-zero code.
- */
-function runGitLog(args: string[], cwd: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const gitProcess = spawn('git', ['log', ...args], {
-      cwd,
-      stdio: ['ignore', 'pipe', 'pipe'],
-    })
-
-    let stdoutData = ''
-    let stderrData = ''
-
-    gitProcess.stdout.on('data', (chunk: Buffer) => {
-      stdoutData += chunk.toString('utf8')
-    })
-
-    gitProcess.stderr.on('data', (chunk: Buffer) => {
-      stderrData += chunk.toString('utf8')
-    })
-
-    gitProcess.on('error', (error) => {
-      reject(new Error(`Failed to spawn 'git log': ${error.message}`))
-    })
-
-    gitProcess.on('close', (code) => {
-      if (code === 0) {
-        resolve(stdoutData)
-      }
-      else {
-        reject(
-          new Error(
-            `'git log' failed with exit code ${code}: ${stderrData.trim()}`,
-          ),
-        )
-      }
-    })
-  })
-}
-
-/**
  * Get raw commits for a specific file
  *
- * ${commit_hash} ${author_name} ${author_email} ${author_date} ${subject} ${ref} ${body}
- *
- * @see {@link https://git-scm.com/docs/pretty-formats | documentation} for details.
  */
-export async function getRawCommits(filepath: string, cwd: string): Promise<RawCommit[]> {
-  const format = ['%H', '%ad', '%an', '%ae', '%b', '%s', '%d'].join(INFO_SPLITTER)
+export async function getRawCommits(filepath: string): Promise<RawCommit[]> {
+  const fileDir = dirname(filepath)
+  const fileName = basename(filepath)
 
-  try {
-    const stdout = await runGitLog(
-      [
-        '--max-count=-1',
-        `--format=${format}${COMMIT_SPLITTER}`,
-        '--date=unix',
-        '--follow',
-        '--',
-        filepath,
-      ],
-      cwd,
-    )
+  const INFO_SPLITTER = '[|]'
+  const COMMIT_SPLITTER = '[GIT_LOG_COMMIT_END]'
 
-    return stdout
-      .substring(0, stdout.length - COMMIT_SPLITTER.length - 1)
-      .split(`${COMMIT_SPLITTER}\n`)
-      .filter(Boolean)
-      .map((rawString) => {
-        const [
-          hash,
-          time,
-          author = '',
-          email = '',
-          body = '',
-          message = '',
-          refs = '',
-        ] = rawString.split(INFO_SPLITTER).map(v => v.trim())
+  /**
+   * The format of git log.
+   *
+   * ${commit_hash} ${author_name} ${author_email} ${author_date} ${subject} ${ref} ${body}
+   *
+   * @see {@link https://git-scm.com/docs/pretty-formats | documentation} for details.
+   *
+   * Note: Make sure that `body` is in last position, as `\n` or `|` in body may breaks subsequent processing.
+   *
+   * @example stdout
+   *
+   * ```bash
+   * $ git log --format="%H|%an|%ae|%ad|%s|%d|%b[GIT_LOG_COMMIT_END]" --follow docs/pages/en/integrations/index.md
+   * 62ef7ed8f54ea1faeacf6f6c574df491814ec1b1|Neko Ayaka|neko@ayaka.moe|Wed Apr 24 14:24:44 2024 +0800|docs: fix english integrations list||Signed-off-by: Neko Ayaka <neko@ayaka.moe>
+   * [GIT_LOG_COMMIT_END]
+   * 34357cc0956db77d1fc597327ba880d7eebf67ce|Rizumu Ayaka|rizumu@ayaka.moe|Mon Apr 22 22:51:24 2024 +0800|release: pre-release v2.0.0-rc10| (tag: v2.0.0-rc10)|Signed-off-by: Rizumu Ayaka <rizumu@ayaka.moe>
+   * [GIT_LOG_COMMIT_END]
+   * (END)
+   * ```
+   */
+  const format = ['%H', '%ad', '%an', '%ae', '%s', '%d', '%b'].join(INFO_SPLITTER)
 
-        return {
-          filepath,
-          hash,
-          time: Number.parseInt(time, 10) * 1000,
-          message,
-          body,
-          refs,
-          author,
-          email,
-          coAuthors: getCoAuthorsFromCommitBody(body),
-        }
-      })
-  }
-  catch (error) {
-    logger.error(`Failed to get commits for ${filepath} in ${cwd}: ${error}`)
+  return await run(
+    'git',
+    [
+      'log',
+      '--max-count=-1',
+      `--format=${format}${COMMIT_SPLITTER}`,
+      '--date=unix',
+      '--follow',
+      '--',
+      fileName,
+    ],
+    fileDir,
+  )
+    .then((stdout) => {
+      return stdout
+      // remove "[GIT_LOG_COMMIT_END]" in last line: split stdout into lines and avoid empty strings
+        .substring(0, stdout.length - COMMIT_SPLITTER.length - 1)
+        .split(`${COMMIT_SPLITTER}\n`)
+        .filter(Boolean)
+        .map((rawString) => {
+          const [
+            hash,
+            time,
+            author = '',
+            email = '',
+            message = '',
+            refs = '',
+            body = '',
+          ] = rawString.split(INFO_SPLITTER).map(v => v.trim())
 
-    return []
-  }
+          return {
+            filepath,
+            hash,
+            time: Number.parseInt(time, 10) * 1000,
+            message,
+            body,
+            refs,
+            author,
+            email,
+            coAuthors: getCoAuthorsFromCommitBody(body),
+          }
+        })
+    })
+    .catch((error) => {
+      logger.error(`Failed to get commits for ${fileName} in ${fileDir}: ${error}`)
+      return []
+    })
 }
 
 export function mergeRawCommits(commits: RawCommit[]): MergedRawCommit[] {
@@ -131,10 +119,10 @@ export function mergeRawCommits(commits: RawCommit[]): MergedRawCommit[] {
   return result
 }
 
-export async function getCommits(filepaths: string[], cwd: string): Promise<MergedRawCommit[]> {
+export async function getCommits(filepaths: string[]): Promise<MergedRawCommit[]> {
   const rawCommits = (
     await Promise.all(
-      filepaths.map(filepath => getRawCommits(filepath, cwd)),
+      filepaths.map(filepath => getRawCommits(filepath)),
     )
   ).flat()
 

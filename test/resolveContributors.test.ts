@@ -120,11 +120,11 @@ describe('normalizeContributor', () => {
 
     expect(result).toEqual({
       name: 'Unknown',
-      username: 'Unknown',
+      username: undefined,
       email: 'unknown@example.com',
       commits: 1,
-      avatar: 'https://github.com/Unknown.png',
-      url: 'https://github.com/Unknown',
+      avatar: 'https://gravatar.com/avatar/1a4725f081613ebf8731b9dd1f089b50496ee6a8981a9f456121e4a802812ec9?d=retro',
+      url: undefined,
     })
   })
 })
@@ -194,28 +194,28 @@ describe('resolveContributors', () => {
 
     expect(contributors).toEqual([
       {
-        avatar: 'https://cdn.avatar.com/Alice.jpg',
+        avatar: 'https://gravatar.com/avatar/ff8d9819fc0e12bf0d24892e45987e249a28dce836a85cad60e28eaaa8c6d976?d=retro',
         commits: 1,
         email: 'alice@example.com',
         name: 'Alice',
-        url: 'https://github.com/Alice',
-        username: 'Alice',
+        url: undefined,
+        username: undefined,
       },
       {
-        avatar: 'https://cdn.avatar.com/Bob.jpg',
+        avatar: 'https://gravatar.com/avatar/5ff860bf1190596c7188ab851db691f0f3169c453936e9e1eba2f9a47f7a0018?d=retro',
         commits: 2,
         email: 'bob@example.com',
         name: 'Bob',
-        url: 'https://github.com/Bob',
-        username: 'Bob',
+        url: undefined,
+        username: undefined,
       },
       {
-        avatar: 'https://cdn.avatar.com/author3.jpg',
+        avatar: 'https://gravatar.com/avatar/20830c6b9067698f81d5e16ef8bcf2569db3c7674e1f4558d56cf93612c73b04?d=retro',
         commits: 1,
         email: 'author3@example.com',
         name: 'author3',
-        url: 'https://github.com/author3',
-        username: 'author3',
+        url: undefined,
+        username: undefined,
       },
     ])
   })

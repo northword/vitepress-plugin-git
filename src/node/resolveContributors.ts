@@ -46,7 +46,7 @@ export function normalizeContributor(
   const info = getContributorInfo({ ...raw, username: noreplyUsername }, options.info)
 
   const name = info?.name ?? raw.name
-  const username = info?.username ?? noreplyUsername ?? name
+  const username = info?.username ?? noreplyUsername
   const email = info?.email ?? raw.email
 
   const avatar: string | undefined = options.avatar

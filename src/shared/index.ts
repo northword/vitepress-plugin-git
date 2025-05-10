@@ -24,7 +24,7 @@ export interface GitContributorInfo {
   /**
    * Contributor username on the git hosting service
    */
-  username: string
+  username?: string
   /**
    * Number of commits
    */

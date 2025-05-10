@@ -1,10 +1,9 @@
 import type { PageData, TransformPageContext } from 'vitepress'
 import type { GitPluginOptions } from './options'
 import path from 'node:path'
-import process from 'node:process'
 import { resolveChangelog } from './resolveChangelog'
 import { resolveContributors } from './resolveContributors'
-import { checkGitRepo, getCommits } from './utils'
+import { getCommits } from './utils'
 
 export async function GitPageDataTransfromer(
   page: PageData,
@@ -17,12 +16,12 @@ export async function GitPageDataTransfromer(
   page.git = {}
 
   // check if the current directory is a git repository
-  const cwd = process.cwd()
-  const isGitRepoValid = checkGitRepo(cwd)
-  // const gitProvider = isGitRepoValid ? inferGitProvider(cwd) : null
-  if (!isGitRepoValid || page.filePath === null) {
-    return
-  }
+  // const cwd = process.cwd()
+  // const isGitRepoValid = checkGitRepo(cwd)
+  // // const gitProvider = isGitRepoValid ? inferGitProvider(cwd) : null
+  // if (!isGitRepoValid || page.filePath === null) {
+  //   return
+  // }
 
   // check if the page should be filtered
   const { filter } = options
@@ -50,7 +49,7 @@ export async function GitPageDataTransfromer(
   ]
 
   // Collect the raw commits for this page
-  const commits = await getCommits(filePaths, cwd)
+  const commits = await getCommits(filePaths)
 
   if (commits.length === 0) {
     page.git = {
