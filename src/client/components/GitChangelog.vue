@@ -24,45 +24,44 @@ const [active, toggleActive] = useToggle()
         </div>
       </div>
 
-      <ul class="vp-changelog-list">
-        <template v-for="item in changelog" :key="item.tag ? item.tag : item.hash">
-          <li
-            v-if="item.tag"
-            class="vp-changelog-item-tag"
-          >
-            <div>
-              <a v-if="item.tagUrl" :href="item.tagUrl" class="vp-changelog-tag">
-                <code>{{ item.tag }}</code>
-              </a>
-              <span v-else class="vp-changelog-tag">
-                <code>{{ item.tag }}</code>
-              </span>
+      <transition name="changelog-expand">
+        <ul v-show="active" class="vp-changelog-list">
+          <template v-for="item in changelog" :key="item.tag ? item.tag : item.hash">
+            <li v-if="item.tag" class="vp-changelog-item-tag">
+              <div>
+                <a v-if="item.tagUrl" :href="item.tagUrl" class="vp-changelog-tag">
+                  <code>{{ item.tag }}</code>
+                </a>
+                <span v-else class="vp-changelog-tag">
+                  <code>{{ item.tag }}</code>
+                </span>
+                <span class="vp-changelog-date" data-allow-mismatch>
+                  {{ "locale.timeOn" }}
+                  <time :datetime="new Date(item.time).toISOString()">{{ item.date }}</time>
+                </span>
+              </div>
+            </li>
+
+            <li v-else class="vp-changelog-item-commit">
+              <component
+                :is="item.commitUrl ? 'a' : 'span'"
+                class="vp-changelog-hash"
+                :href="item.commitUrl"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <code>{{ item.hash.slice(0, 5) }}</code>
+              </component>
+              <span class="vp-changelog-divider">-</span>
+              <span class="vp-changelog-message" v-html="item.message" />
               <span class="vp-changelog-date" data-allow-mismatch>
-                {{ "locale.timeOn" }}
+                {{ 'on' }}
                 <time :datetime="new Date(item.time).toISOString()">{{ item.date }}</time>
               </span>
-            </div>
-          </li>
-
-          <li v-else class="vp-changelog-item-commit">
-            <component
-              :is="item.commitUrl ? 'a' : 'span'"
-              class="vp-changelog-hash"
-              :href="item.commitUrl"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <code>{{ item.hash.slice(0, 5) }}</code>
-            </component>
-            <span class="vp-changelog-divider">-</span>
-            <span class="vp-changelog-message" v-html="item.message" />
-            <span class="vp-changelog-date" data-allow-mismatch>
-              {{ 'on' }}
-              <time :datetime="new Date(item.time).toISOString()">{{ item.date }}</time>
-            </span>
-          </li>
-        </template>
-      </ul>
+            </li>
+          </template>
+        </ul>
+      </transition>
     </div>
   </template>
 </template>
@@ -140,14 +139,10 @@ const [active, toggleActive] = useToggle()
 }
 
 .vp-changelog-list {
-  display: none;
   margin-block: 0.5rem;
   padding-inline-start: 0;
   list-style: none;
-}
-
-.vp-changelog-wrapper.active .vp-changelog-list {
-  display: block;
+  overflow: hidden;
 }
 
 .vp-changelog-item-tag,
@@ -214,5 +209,27 @@ const [active, toggleActive] = useToggle()
   color: var(--vp-c-text-subtle);
   font-size: 0.75rem;
   transition: color var(--vp-t-color);
+}
+
+.changelog-expand-enter-active,
+.changelog-expand-leave-active {
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+  overflow: hidden;
+}
+
+.changelog-expand-enter-from,
+.changelog-expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.changelog-expand-enter-to,
+.changelog-expand-leave-from {
+  max-height: 1000px;
+  opacity: 1;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 </style>
