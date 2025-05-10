@@ -36,6 +36,10 @@ export default defineConfig({
   },
 
   async transformPageData(pageData, ctx) {
-    await GitPageDataTransfromer(pageData, ctx)
+    await GitPageDataTransfromer(pageData, ctx, {
+      contributors: {
+        avatar: true,
+      },
+    })
   },
 })

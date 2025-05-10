@@ -1,145 +1,101 @@
-import type { GitContributorInfo, KnownGitProvider } from '../shared'
-import type { ContributorsOptions } from './options'
+import type { GitContributorInfo } from '../shared'
+import type { ContributorInfo, ContributorsOptions } from './options'
 import type { MergedRawCommit } from './typings'
-import {
-  checkGithubUsername,
-  digestSHA256,
-  getContributorInfo,
-  getUserNameWithNoreplyEmail,
-} from './utils'
+import { digestSHA256, getContributorInfo, getUserNameWithNoreplyEmail } from './utils'
 
-export function getRawContributors(commits: MergedRawCommit[], options: ContributorsOptions, gitProvider: KnownGitProvider | null): GitContributorInfo[] {
-  const contributors = new Map<string, GitContributorInfo>()
+interface RawContributor {
+  name: string
+  email: string
+  commits: number
+}
 
-  // copy and reverse commits
-  for (const commit of [...commits].reverse()) {
-    const authors = [
-      { name: commit.author, email: commit.email },
-      ...commit.coAuthors,
-    ]
-
-    for (const { name, email } of authors) {
-      const usernameWithNoreplyEmail = getUserNameWithNoreplyEmail(email)
-      const config = getContributorInfo(
-        { name: usernameWithNoreplyEmail ?? name, email },
-        options.info,
-      )
-
-      // Only trust the username from `info` and `noreply email`.
-      const username = config?.username ?? usernameWithNoreplyEmail
-
-      const contributor = contributors.get(username ?? name)
-
-      if (contributor) {
-        contributor.commits++
-        // try to rewrite the no-reply email to a genuine email
-        if (contributor.email.includes('@users.noreply.github.com')) {
-          contributor.email = config?.email ?? email
-        }
-      }
-      else {
-        const item: GitContributorInfo = {
-          name: config?.name ?? username ?? name,
-          // if `username` not found, check if `name` is a valid github username
-          username:
-            username
-            ?? (gitProvider === 'github' && checkGithubUsername(name) ? name : ''),
-          email: config?.email || email,
-          commits: 1,
-        }
-
-        if (options.avatar) {
-          item.avatar
-            = config?.avatar
-              ?? (item.username
-                ? options.avatarPattern?.replace(':username', item.username)
-                : null)
-              ?? (item.username
-                ? `https://avatars.githubusercontent.com/${item.username}?v=4`
-                : `https://gravatar.com/avatar/${digestSHA256(email)}?d=retro`)
-        }
-
-        const url
-          = config?.url
-            ?? (item.username ? `https://github.com/${item.username}` : undefined)
-
-        if (url)
-          item.url = url
-
-        contributors.set(username ?? name, item)
-      }
-    }
-  }
-
-  return Array.from(contributors.values()).filter((item, index, self) => {
-    // If one of the contributors is a "noreply" email address, and there's
-    // already a contributor with the same name, it is very likely a duplicate,
-    // so it can be removed.
-    if (item.email.split('@')[1]?.match(/no-?reply/)) {
-      const realIndex = self.findIndex(t => t.name === item.name)
-      if (realIndex !== index) {
-        // Update the "real" contributor to also include the noreply's commits
-        self[realIndex].commits += item.commits
-        return false
-      }
-      return true
-    }
-    return true
+export function getContributorsFromCommit(commits: MergedRawCommit[]): RawContributor[] {
+  return commits.flatMap(({ author, email, coAuthors }) => {
+    return [
+      {
+        name: author,
+        email,
+      },
+      ...coAuthors,
+    ].map(c => ({ ...c, commits: 1 }))
   })
 }
 
-export function resolveContributors(commits: MergedRawCommit[], gitProvider: KnownGitProvider | null, options: ContributorsOptions, extraContributors: string[] = []): GitContributorInfo[] {
-  const contributors = getRawContributors(commits, options, gitProvider)
+export function getAvatar(contributor: ContributorInfo, pattern?: string): string {
+  if (contributor.avatar)
+    return contributor.avatar
 
-  if (options.info?.length && extraContributors.length) {
-    for (const extraContributor of extraContributors) {
-      if (
-        contributors.every(
-          item =>
-            item.username !== extraContributor
-            && item.name !== extraContributor,
-        )
-      ) {
-        const contributorInfo = getContributorInfo(
-          { name: extraContributor },
-          options.info,
-        )
-
-        if (!contributorInfo)
-          continue
-
-        const result: GitContributorInfo = {
-          name: contributorInfo.name ?? extraContributor,
-          username: contributorInfo.username,
-          email: contributorInfo.email ?? '',
-          commits: 0,
-        }
-
-        const url
-          = contributorInfo.url
-            ?? (gitProvider === 'github'
-              ? `https://github.com/${contributorInfo.username}`
-              : null)
-
-        if (options.avatar) {
-          result.avatar
-            = contributorInfo.avatar
-              ?? options.avatarPattern?.replace(
-                ':username',
-                contributorInfo.username,
-              )
-              ?? (gitProvider === 'github'
-                ? `https://avatars.githubusercontent.com/${contributorInfo.username}?v=4`
-                : `https://gravatar.com/avatar/${digestSHA256(contributorInfo.username)}?d=retro`)
-        }
-
-        if (url)
-          result.url = url
-
-        contributors.push(result)
-      }
-    }
+  if (contributor.username) {
+    if (pattern)
+      return pattern.replace(':username', contributor.username)
+    return `https://github.com/${contributor.username}.png`
   }
+
+  if (contributor.email)
+    return `https://gravatar.com/avatar/${digestSHA256(contributor.email)}?d=retro`
+
+  return ''
+}
+
+export function normalizeContributor(
+  raw: RawContributor,
+  options: ContributorsOptions,
+): GitContributorInfo {
+  const noreplyUsername = getUserNameWithNoreplyEmail(raw.email)
+
+  const info = getContributorInfo({ ...raw, username: noreplyUsername }, options.info)
+
+  const name = info?.name ?? raw.name
+  const username = info?.username ?? noreplyUsername ?? name
+  const email = info?.email ?? raw.email
+
+  const avatar: string | undefined = options.avatar
+    ? getAvatar({ ...info, username, name, email }, options.avatarPattern)
+    : undefined
+
+  const url
+    = info?.url
+      ?? (username ? `https://github.com/${username}` : undefined)
+
+  return {
+    name,
+    username,
+    email,
+    avatar,
+    url,
+    commits: raw.commits,
+  }
+}
+
+export function mergeContributors<T extends RawContributor>(list: T[]): T[] {
+  const map = new Map<string, T>()
+
+  for (const contributor of list) {
+    const key = contributor.name
+    const existing = map.get(key)
+
+    if (existing)
+      existing.commits += contributor.commits
+    else
+      map.set(key, { ...contributor })
+  }
+
+  return [...map.values()]
+}
+
+export function resolveContributors(
+  commits: MergedRawCommit[],
+  options: ContributorsOptions,
+  extraContributors: string[] = [],
+): GitContributorInfo[] {
+  const extra: RawContributor[] = extraContributors.map(c => ({
+    name: c,
+    email: '',
+    commits: 1,
+  }))
+  const normalized = mergeContributors([...getContributorsFromCommit(commits), ...extra])
+    .map(identity => normalizeContributor(identity, options))
+  const contributors = mergeContributors(normalized)
 
   return options.transform?.(contributors) ?? contributors
 }

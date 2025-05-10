@@ -4,7 +4,7 @@ import path from 'node:path'
 import process from 'node:process'
 import { resolveChangelog } from './resolveChangelog'
 import { resolveContributors } from './resolveContributors'
-import { checkGitRepo, getCommits, inferGitProvider } from './utils'
+import { checkGitRepo, getCommits } from './utils'
 
 export async function GitPageDataTransfromer(
   page: PageData,
@@ -19,7 +19,7 @@ export async function GitPageDataTransfromer(
   // check if the current directory is a git repository
   const cwd = process.cwd()
   const isGitRepoValid = checkGitRepo(cwd)
-  const gitProvider = isGitRepoValid ? inferGitProvider(cwd) : null
+  // const gitProvider = isGitRepoValid ? inferGitProvider(cwd) : null
   if (!isGitRepoValid || page.filePath === null) {
     return
   }
@@ -76,7 +76,6 @@ export async function GitPageDataTransfromer(
   if (isEnableContributors) {
     page.git.contributors = resolveContributors(
       commits,
-      gitProvider,
       contributorsOptions,
       Array.isArray(frontmatter.contributors)
         ? frontmatter.contributors

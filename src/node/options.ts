@@ -11,7 +11,7 @@ export interface ContributorInfo {
    *
    * 贡献者在 Git 托管服务中的用户名
    */
-  username: string
+  username?: string
 
   /**
    * Contributor name displayed on the page, default is `username`
@@ -29,7 +29,7 @@ export interface ContributorInfo {
    * 贡献者别名， 由于贡献者可能在本地 git 配置中保存的 用户名与 托管服务 用户名不一致，
    * 这时候可以通过别名映射到真实的用户名
    */
-  alias?: string[] | string
+  alias?: string[]
 
   /**
    * The primary email of the contributor
@@ -44,7 +44,7 @@ export interface ContributorInfo {
    *
    * 贡献者在 Git 托管服务中的备用邮箱，或者曾经使用过的邮箱
    */
-  emailAlias?: string[] | string
+  emailAlias?: string[]
 
   /**
    * The avatar url of the contributor.
