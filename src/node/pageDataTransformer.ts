@@ -1,5 +1,5 @@
 import type { PageData, TransformPageContext } from 'vitepress'
-import type { GitPluginOptions } from './options'
+import type { GitPluginForTransfomerOptions } from './options'
 import path from 'node:path'
 import { resolveChangelog } from './resolveChangelog'
 import { resolveContributors } from './resolveContributors'
@@ -8,7 +8,7 @@ import { getCommits } from './utils'
 export async function GitPageDataTransfromer(
   page: PageData,
   context: TransformPageContext,
-  options: GitPluginOptions = {},
+  options: GitPluginForTransfomerOptions = {},
 ) {
   // Init the page.git as an empty object,
   // if one feature is enabled, we add the property to the page.git,

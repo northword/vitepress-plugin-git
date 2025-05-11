@@ -9,6 +9,8 @@ export interface GitLocaleData {
    */
   changelog: string
 
+  noContributors: string
+
   /**
    * Word to represent a commit "on" a time
    */
@@ -30,6 +32,7 @@ export type GitLocales = Record<string, GitLocaleData>
 export const defaultLocaleEn: GitLocaleData = {
   contributors: 'Contributors',
   changelog: 'Changelog',
+  noContributors: 'No contributors',
   timeOn: 'on',
   viewChangelog: 'View All Changelog',
   latestUpdateAt: 'Last Updated:',
@@ -38,6 +41,7 @@ export const defaultLocaleEn: GitLocaleData = {
 export const defaultLocaleZh: GitLocaleData = {
   contributors: '贡献者',
   changelog: '更新日志',
+  noContributors: '暂无贡献者',
   timeOn: '于',
   viewChangelog: '查看所有更新日志',
   latestUpdateAt: '最近更新：',
@@ -46,6 +50,7 @@ export const defaultLocaleZh: GitLocaleData = {
 export const defaultLocaleZhHant: GitLocaleData = {
   contributors: '貢獻者',
   changelog: '更新日誌',
+  noContributors: '暂无贡献者',
   timeOn: '於',
   viewChangelog: '查看所有更新日誌',
   latestUpdateAt: '最近更新：',

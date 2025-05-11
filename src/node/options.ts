@@ -169,7 +169,7 @@ export interface ChangelogOptions {
   tagUrlPattern?: string
 }
 
-export interface GitPluginOptions {
+export interface GitPluginForTransfomerOptions {
   /**
    * Page filter, if it returns `true`, the page will collect git information.
    *

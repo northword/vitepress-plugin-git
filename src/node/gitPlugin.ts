@@ -1,8 +1,8 @@
 import type { Plugin } from 'vite'
-import type { GitPluginOptions } from './options'
+import type { GitPluginForTransfomerOptions } from './options'
 
 // Vite 插件，负责处理依赖和 Markdown Transfrom
-export function GitPlugin(_options: GitPluginOptions = {}): Plugin {
+export function GitPluginForVite(_options: GitPluginForTransfomerOptions = {}): Plugin {
   return {
     name: 'vitepress-plugin-git',
     // May set to 'pre' since end user may use vitepress wrapped vite plugin to
@@ -16,9 +16,8 @@ export function GitPlugin(_options: GitPluginOptions = {}): Plugin {
       // },
       // _git_options: options,
       optimizeDeps: {
-        exclude: [
-          '@nolebase/vitepress-plugin-git-changelog/client',
-        ],
+        include: ['@vueuse/core'],
+        exclude: [],
       },
       ssr: {
         noExternal: [],

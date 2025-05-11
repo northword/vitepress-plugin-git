@@ -1,10 +1,12 @@
 import type { ComputedRef } from 'vue'
 import type { GitLocaleData, GitLocales } from '../locales'
 import { useData } from 'vitepress'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import { defaultLocaleInfo } from '../locales'
+import { gitInjectionKey } from '../options'
 
 export function useLocale(): ComputedRef<GitLocaleData> {
+  const options = inject(gitInjectionKey)
   const { lang } = useData()
 
   return computed(() => {
@@ -13,9 +15,8 @@ export function useLocale(): ComputedRef<GitLocaleData> {
       || defaultLocaleInfo[fallbackLang]
       || defaultLocaleInfo.en
 
-    // todo: get override from vue inject options
-    const overrides: GitLocales = {}
-    const overrideLocale = overrides[lang.value] || {}
+    const overrides: GitLocales = options?.locales ?? {}
+    const overrideLocale = overrides[lang.value] ?? {}
 
     return { ...defaultLocale, ...overrideLocale }
   })

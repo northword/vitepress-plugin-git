@@ -20,7 +20,7 @@ const locale = useLocale()
   </template>
   <template v-else>
     <p class="vp-contributors-empty">
-      No contributors found.
+      {{ locale.noContributors }}
     </p>
   </template>
 </template>
