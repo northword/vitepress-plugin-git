@@ -14,7 +14,7 @@ defineProps<{
     target="_blank"
     rel="noreferrer"
   >
-    <img v-if="avatar" :src="avatar" alt="" class="vp-contributor-avatar">
+    <img v-if="avatar" :src="avatar" :alt="`The avatar of contributor named as ${name}`" class="vp-contributor-avatar">
     <span class="vp-contributor-name">{{ name }}</span>
   </component>
 </template>
