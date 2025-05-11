@@ -14,7 +14,6 @@ const GitChangelog = defineAsyncComponent(() =>
 
 <template>
   <div class="git-info">
-    {{ page }}
     <div v-if="page.git" class="git-info-doc vp-doc">
       <GitContributors v-if="page.git.contributors" />
       <GitChangelog v-if="page.git.changelog" />

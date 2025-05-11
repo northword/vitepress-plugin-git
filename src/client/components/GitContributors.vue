@@ -9,6 +9,7 @@ const locale = useLocale()
 
 <template>
   <VPHeader anchor="git-contributors" :text="locale.contributors" />
+
   <template v-if="contributors.length">
     <div class="vp-contributors">
       <GitContributor
@@ -18,6 +19,7 @@ const locale = useLocale()
       />
     </div>
   </template>
+
   <template v-else>
     <p class="vp-contributors-empty">
       {{ locale.noContributors }}

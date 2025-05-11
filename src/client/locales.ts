@@ -25,6 +25,8 @@ export interface GitLocaleData {
    * Latest updated
    */
   latestUpdateAt: string
+
+  noChangelog: string
 }
 
 export type GitLocales = Record<string, GitLocaleData>
@@ -36,6 +38,7 @@ export const defaultLocaleEn: GitLocaleData = {
   timeOn: 'on',
   viewChangelog: 'View All Changelog',
   latestUpdateAt: 'Last Updated:',
+  noChangelog: 'No Changelog',
 }
 
 export const defaultLocaleZh: GitLocaleData = {
@@ -45,6 +48,7 @@ export const defaultLocaleZh: GitLocaleData = {
   timeOn: '于',
   viewChangelog: '查看所有更新日志',
   latestUpdateAt: '最近更新：',
+  noChangelog: '暂无变更日志',
 }
 
 export const defaultLocaleZhHant: GitLocaleData = {
@@ -54,6 +58,7 @@ export const defaultLocaleZhHant: GitLocaleData = {
   timeOn: '於',
   viewChangelog: '查看所有更新日誌',
   latestUpdateAt: '最近更新：',
+  noChangelog: '暂无更新日誌',
 }
 
 export const defaultLocaleInfo: GitLocales = {

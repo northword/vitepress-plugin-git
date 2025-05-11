@@ -23,7 +23,12 @@ export default defineConfig({
       },
       {
         text: 'Example',
-        link: '/example',
+        items: [
+          { text: 'Default', link: '/example/index' },
+          { text: 'Disable Contributors', link: '/example/disable-contributors' },
+          { text: 'Disable Changelog', link: '/example/disable-changelog' },
+          { text: 'Chinese', link: '/example/lang-zh' },
+        ],
       },
     ],
 
@@ -39,6 +44,9 @@ export default defineConfig({
     await GitPageDataTransfromer(pageData, ctx, {
       contributors: {
         avatar: true,
+      },
+      changelog: {
+        repoUrl: 'https://github.com/northword/vitepress-plugin-git',
       },
     })
   },
