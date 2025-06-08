@@ -22,7 +22,7 @@ export async function GitPageDataTransfromer(
     return
 
   // check if the page enabled features
-  const { contributors = {}, changelog = {}, createdTime = true, updatedTime = true } = options
+  const { contributors = true, changelog = true, createdTime = true, updatedTime = true } = options.features ?? {}
   const { frontmatter } = page
   const isEnableChangelog = frontmatter.changelog ?? changelog
   const isEnableContributors = frontmatter.contributors ?? contributors
@@ -62,8 +62,8 @@ export async function GitPageDataTransfromer(
     page.git.updatedTime = commits[0]?.time ?? -1
   }
 
-  const contributorsOptions = typeof contributors === 'object' ? contributors : {}
-  const changelogOptions = typeof changelog === 'object' ? changelog : {}
+  const contributorsOptions = options.contributors ?? {}
+  const changelogOptions = options.changelog ?? {}
 
   if (isEnableContributors) {
     page.git.contributors = resolveContributors(

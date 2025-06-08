@@ -181,13 +181,7 @@ export interface ChangelogOptions {
   tagUrlPattern?: string
 }
 
-export interface GitPluginForTransfomerOptions {
-  /**
-   * Page filter, if it returns `true`, the page will collect git information.
-   *
-   * 页面过滤器，如果返回 `true`，该页面将收集 git 信息
-   */
-  filter?: (page: PageData) => boolean
+interface GitPluginFeatures {
   /**
    * Whether to get the created time of a page
    *
@@ -213,7 +207,7 @@ export interface GitPluginForTransfomerOptions {
    *
    * @default true
    */
-  contributors?: ContributorsOptions | boolean
+  contributors?: boolean
 
   /**
    * Whether to get the changelog of a page
@@ -222,5 +216,41 @@ export interface GitPluginForTransfomerOptions {
    *
    * @default true
    */
-  changelog?: ChangelogOptions | boolean
+  changelog?: boolean
+}
+
+export interface GitPluginForTransfomerOptions {
+  /**
+   * Page filter, if it returns `true`, the page will collect git information.
+   *
+   * 页面过滤器，如果返回 `true`，该页面将收集 git 信息
+   */
+  filter?: (page: PageData) => boolean
+
+  /**
+   * 包括额外的页面
+   *
+   * 将其他文件的 Git 信息附加在此页面上
+   */
+  include?: (page: PageData) => string[]
+
+  features?: GitPluginFeatures
+
+  /**
+   * Whether to get the contributors of a page
+   *
+   * 是否收集页面的贡献者
+   *
+   * @default true
+   */
+  contributors?: ContributorsOptions
+
+  /**
+   * Whether to get the changelog of a page
+   *
+   * 是否收集页面的变更历史记录
+   *
+   * @default true
+   */
+  changelog?: ChangelogOptions
 }
