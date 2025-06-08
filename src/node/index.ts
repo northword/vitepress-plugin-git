@@ -1,4 +1,4 @@
-// export * from './gitPlugin'
+export * from './gitPlugin'
 export type * from './options'
 export * from './pageDataTransformer'
 export * from './resolveChangelog'

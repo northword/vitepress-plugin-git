@@ -1,8 +1,9 @@
 import type { Plugin } from 'vite'
-import type { GitPluginForTransfomerOptions } from './options'
+import type { GitPluginOptions } from './options'
+import { setGitOptions } from './options'
 
 // Vite 插件，负责处理依赖和 Markdown Transfrom
-export function GitPluginForVite(_options: GitPluginForTransfomerOptions = {}): Plugin {
+export function GitPluginForVite(options: GitPluginOptions = {}): Plugin {
   return {
     name: 'vitepress-plugin-git',
     // May set to 'pre' since end user may use vitepress wrapped vite plugin to
@@ -10,11 +11,14 @@ export function GitPluginForVite(_options: GitPluginForTransfomerOptions = {}): 
     // vitepress or the other markdown processing plugins.
     enforce: 'pre',
 
+    buildStart() {
+      // check if the current directory is a git repository
+    },
+
     config: () => ({
-      // define: {
-      //   __GIT_OPTIONS__: options,
-      // },
-      // _git_options: options,
+      define: {
+        // __GIT_OPTIONS__: options,
+      },
       optimizeDeps: {
         include: ['@vueuse/core'],
         exclude: [],
@@ -27,23 +31,7 @@ export function GitPluginForVite(_options: GitPluginForTransfomerOptions = {}): 
     ),
 
     configResolved(_config) {
-      // console.log(JSON.stringify(config, null, 2))
+      setGitOptions(options)
     },
-
-    // transform(code, id) {
-    //   if (!id.endsWith('.md'))
-    //     return null
-
-    //   code = [
-    //     code,
-    //     '',
-    //     '<NolebaseGitContributors />',
-    //     '',
-    //     '<NolebaseGitChangelog />',
-    //     '',
-    //   ].join('\n')
-
-    //   return code
-    // },
   }
 }

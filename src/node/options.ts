@@ -2,6 +2,18 @@ import type { PageData } from 'vitepress'
 import type { GitContributorInfo } from '../shared'
 import type { MergedRawCommit } from './typings'
 
+let _options: GitPluginOptions = {}
+
+export function setGitOptions(options: GitPluginOptions) {
+  _options = options
+}
+
+export function getGitOptions() {
+  return _options
+}
+
+export interface GitPluginOptions extends GitPluginForTransfomerOptions {}
+
 /**
  * Contributor information
  */
@@ -16,7 +28,7 @@ export interface ContributorInfo {
   /**
    * Contributor name displayed on the page, default is `username`
    *
-   * 贡献者显示在页面上的名字， 默认为 `username`
+   * 贡献者显示在页面上的名字，默认为 `username`
    */
   name?: string
 
@@ -26,7 +38,7 @@ export interface ContributorInfo {
    * compared to their usernames on the hosting service, In this case, aliases can be used to
    * map to the actual usernames.
    *
-   * 贡献者别名， 由于贡献者可能在本地 git 配置中保存的 用户名与 托管服务 用户名不一致，
+   * 贡献者别名，由于贡献者可能在本地 git 配置中保存的 用户名与 托管服务 用户名不一致，
    * 这时候可以通过别名映射到真实的用户名
    */
   alias?: string[]
@@ -158,7 +170,7 @@ export interface ChangelogOptions {
    * - `:repo` - The url of the git repository
    * - `:tag` - Name of the tag
    *
-   * tag 访问地址模式,
+   * tag 访问地址模式，
    * 默认值：':repo/releases/tag/:tag'
    *
    * - `:repo` - git 仓库的访问地址
@@ -173,7 +185,7 @@ export interface GitPluginForTransfomerOptions {
   /**
    * Page filter, if it returns `true`, the page will collect git information.
    *
-   * 页面过滤器，如果返回 `true` ，该页面将收集 git 信息
+   * 页面过滤器，如果返回 `true`，该页面将收集 git 信息
    */
   filter?: (page: PageData) => boolean
   /**

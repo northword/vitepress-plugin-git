@@ -1,6 +1,7 @@
 import type { PageData, TransformPageContext } from 'vitepress'
 import type { GitPluginForTransfomerOptions } from './options'
 import path from 'node:path'
+import { getGitOptions } from './options'
 import { resolveChangelog } from './resolveChangelog'
 import { resolveContributors } from './resolveContributors'
 import { getCommits } from './utils'
@@ -8,20 +9,12 @@ import { getCommits } from './utils'
 export async function GitPageDataTransfromer(
   page: PageData,
   context: TransformPageContext,
-  options: GitPluginForTransfomerOptions = {},
+  options: GitPluginForTransfomerOptions = getGitOptions(),
 ) {
   // Init the page.git as an empty object,
   // if one feature is enabled, we add the property to the page.git,
   // else it's undefined
   page.git = {}
-
-  // check if the current directory is a git repository
-  // const cwd = process.cwd()
-  // const isGitRepoValid = checkGitRepo(cwd)
-  // // const gitProvider = isGitRepoValid ? inferGitProvider(cwd) : null
-  // if (!isGitRepoValid || page.filePath === null) {
-  //   return
-  // }
 
   // check if the page should be filtered
   const { filter } = options

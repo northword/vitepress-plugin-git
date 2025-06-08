@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-import { GitPageDataTransfromer } from 'vitepress-plugin-git'
+import { GitPageDataTransfromer, GitPluginForVite } from 'vitepress-plugin-git'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -36,18 +36,18 @@ export default defineConfig({
   vite: {
     plugins: [
       // Inspect(),
-      // GitPlugin(),
+      GitPluginForVite({
+        contributors: {
+          avatar: true,
+        },
+        changelog: {
+          repoUrl: 'https://github.com/northword/vitepress-plugin-git',
+        },
+      }),
     ],
   },
 
   async transformPageData(pageData, ctx) {
-    await GitPageDataTransfromer(pageData, ctx, {
-      contributors: {
-        avatar: true,
-      },
-      changelog: {
-        repoUrl: 'https://github.com/northword/vitepress-plugin-git',
-      },
-    })
+    await GitPageDataTransfromer(pageData, ctx)
   },
 })
