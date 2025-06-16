@@ -1,5 +1,5 @@
 import type { PageData, TransformPageContext } from 'vitepress'
-import type { GitPluginForTransfomerOptions } from './options'
+import type { GitTransfomerOptions } from './options'
 import path from 'node:path'
 import { getGitOptions } from './options'
 import { resolveChangelog } from './resolveChangelog'
@@ -9,7 +9,7 @@ import { getCommits } from './utils'
 export async function GitPageDataTransfromer(
   page: PageData,
   context: TransformPageContext,
-  options: GitPluginForTransfomerOptions = getGitOptions(),
+  options: GitTransfomerOptions = getGitOptions(),
 ) {
   // Init the page.git as an empty object,
   // if one feature is enabled, we add the property to the page.git,
@@ -22,7 +22,7 @@ export async function GitPageDataTransfromer(
     return
 
   // check if the page enabled features
-  const { contributors = {}, changelog = {}, createdTime = true, updatedTime = true } = options
+  const { contributors = true, changelog = true, createdTime = true, updatedTime = true } = options.features ?? {}
   const { frontmatter } = page
   const isEnableChangelog = frontmatter.changelog ?? changelog
   const isEnableContributors = frontmatter.contributors ?? contributors
@@ -62,8 +62,8 @@ export async function GitPageDataTransfromer(
     page.git.updatedTime = commits[0]?.time ?? -1
   }
 
-  const contributorsOptions = typeof contributors === 'object' ? contributors : {}
-  const changelogOptions = typeof changelog === 'object' ? changelog : {}
+  const contributorsOptions = options.contributors ?? {}
+  const changelogOptions = options.changelog ?? {}
 
   if (isEnableContributors) {
     page.git.contributors = resolveContributors(

@@ -1,5 +1,5 @@
-import type { GitContributorInfo } from '../shared'
-import type { ContributorInfo, ContributorsOptions } from './options'
+import type { GitContributorData } from '../shared'
+import type { ContributorInfo, GitContributorsNodeOptions } from './options'
 import type { MergedRawCommit } from './typings'
 import { digestSHA256, getContributorInfo, getUserNameWithNoreplyEmail } from './utils'
 
@@ -39,8 +39,8 @@ export function getAvatar(contributor: ContributorInfo, pattern?: string): strin
 
 export function normalizeContributor(
   raw: RawContributor,
-  options: ContributorsOptions,
-): GitContributorInfo {
+  options: GitContributorsNodeOptions,
+): GitContributorData {
   const noreplyUsername = getUserNameWithNoreplyEmail(raw.email)
 
   const info = getContributorInfo({ ...raw, username: noreplyUsername }, options.info)
@@ -85,9 +85,9 @@ export function mergeContributors<T extends RawContributor>(list: T[]): T[] {
 
 export function resolveContributors(
   commits: MergedRawCommit[],
-  options: ContributorsOptions,
+  options: GitContributorsNodeOptions,
   extraContributors: string[] = [],
-): GitContributorInfo[] {
+): GitContributorData[] {
   const extra: RawContributor[] = extraContributors.map(c => ({
     name: c,
     email: '',

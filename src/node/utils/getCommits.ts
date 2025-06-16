@@ -1,4 +1,4 @@
-import type { GitContributorInfo } from '../../shared'
+import type { GitContributorData } from '../../shared'
 import type { MergedRawCommit, RawCommit } from '../typings'
 import { basename, dirname } from 'node:path'
 import { logger } from './logger'
@@ -13,7 +13,7 @@ import { run } from './process'
  */
 const RE_CO_AUTHOR = /^ *Co-authored-by: ?([^<]*)<([^>]*)> */gim
 
-function getCoAuthorsFromCommitBody(body: string): Pick<GitContributorInfo, 'email' | 'name'>[] {
+function getCoAuthorsFromCommitBody(body: string): Pick<GitContributorData, 'email' | 'name'>[] {
   return body
     ? Array.from(body.matchAll(RE_CO_AUTHOR)).map(([, name, email]) => ({
         name: name.trim(),

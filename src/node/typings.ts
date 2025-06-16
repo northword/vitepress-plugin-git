@@ -1,4 +1,4 @@
-import type { CoAuthorInfo } from '../shared'
+import type { GitCoAuthorData } from '../shared'
 
 export interface RawCommit {
   /**
@@ -37,7 +37,7 @@ export interface RawCommit {
   /**
    * The co-authors of the commit
    */
-  coAuthors: CoAuthorInfo[]
+  coAuthors: GitCoAuthorData[]
 }
 
 export interface MergedRawCommit extends Omit<RawCommit, 'filepath'> {

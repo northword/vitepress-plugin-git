@@ -1,13 +1,7 @@
 import type { InjectionKey } from 'vue'
-import type { GitLocales } from './locales'
+import type { GitClientOptions } from '../shared'
 
-export const gitInjectionKey: InjectionKey<GitPluginForVueOptions> = Symbol('vitepress-plugin-git')
+export const gitInjectionKey: InjectionKey<GitClientOptions> = Symbol('vitepress-plugin-git')
 
-export interface GitPluginForVueOptions {
-  /**
-   * Localization config
-   *
-   * 本地化配置
-   */
-  locales?: GitLocales
-}
+declare const __GIT_OPTIONS__: GitClientOptions
+export const gitClientOptions = __GIT_OPTIONS__

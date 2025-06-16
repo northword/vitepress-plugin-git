@@ -1,5 +1,5 @@
-import type { GitChangelogInfo } from '../shared'
-import type { ChangelogOptions, ContributorInfo } from './options'
+import type { GitChangelogData } from '../shared'
+import type { ContributorInfo, GitChangelogNodeOptions } from './options'
 import type { MergedRawCommit } from './typings'
 import { getContributorInfo, getUserNameWithNoreplyEmail } from './utils'
 
@@ -19,7 +19,7 @@ function parseTagName(refs: string): string | undefined {
   return tag?.replace('tag:', '').trim() || ''
 }
 
-function resolveRepoUrl(repoUrl: ChangelogOptions['repoUrl'], commit: MergedRawCommit): string | undefined {
+function resolveRepoUrl(repoUrl: GitChangelogNodeOptions['repoUrl'], commit: MergedRawCommit): string | undefined {
   if (typeof repoUrl === 'function')
     return repoUrl(commit) ?? undefined
   if (typeof repoUrl === 'string')
@@ -46,9 +46,9 @@ function resolveTagUrl(repo: string, tag: string, pattern: string): string {
 
 export function resolveChangelog(
   commits: MergedRawCommit[],
-  options: ChangelogOptions,
+  options: GitChangelogNodeOptions,
   contributors: ContributorInfo[],
-): GitChangelogInfo[] {
+): GitChangelogData[] {
   const {
     maxCount = 100,
     repoUrl,
@@ -65,7 +65,7 @@ export function resolveChangelog(
       contributors,
     )
 
-    const resolved: GitChangelogInfo = {
+    const resolved: GitChangelogData = {
       hash,
       time,
       email: contributor?.email || email,

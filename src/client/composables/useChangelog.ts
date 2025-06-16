@@ -1,13 +1,11 @@
 import type { ComputedRef } from 'vue'
-import type { GitChangelogInfo } from '../../shared'
+import type { GitChangelogData } from '../../shared'
 import { useData } from 'vitepress'
 import { computed } from 'vue'
 
-export interface GitChangelogItem extends GitChangelogInfo {
+export interface GitChangelogItem extends GitChangelogData {
   date: string
 }
-
-// const RE_ISSUE = /#(\d+)/g
 
 export function useChangelog(): ComputedRef<GitChangelogItem[]> {
   const { lang, page } = useData()

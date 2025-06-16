@@ -1,9 +1,9 @@
 import type { ComputedRef } from 'vue'
-import type { GitContributorInfo } from '../../shared'
+import type { GitContributorData } from '../../shared'
 import { useData } from 'vitepress'
 import { computed } from 'vue'
 
-export function useContributors(): ComputedRef<GitContributorInfo[]> {
+export function useContributors(): ComputedRef<GitContributorData[]> {
   const { page } = useData()
 
   return computed(() => {

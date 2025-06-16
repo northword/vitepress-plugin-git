@@ -1,18 +1,64 @@
 import type { PageData } from 'vitepress'
-import type { GitContributorInfo } from '../shared'
+import type { GitChangelogClientOptions, GitClientOptions, GitContributorData, GitContributorsClientOptions, GitLocalesOptions } from '../shared'
 import type { MergedRawCommit } from './typings'
 
-let _options: GitPluginOptions = {}
+// ==============================================================
+// helpers to store config
+// ==============================================================
+let _options: GitOptions = {}
 
-export function setGitOptions(options: GitPluginOptions) {
+export function setGitOptions(options: GitOptions) {
   _options = options
 }
 
-export function getGitOptions() {
+export function getGitOptions(): GitOptions {
   return _options
 }
 
-export interface GitPluginOptions extends GitPluginForTransfomerOptions {}
+export function resolveClientOptions(options: GitOptions): GitClientOptions {
+  return {
+    contributors: {
+      avatar: options.contributors?.avatar,
+    },
+    changelog: {
+      relativeTime: options.changelog?.relativeTime,
+    },
+    locales: options.locales,
+  }
+}
+
+// ==============================================================
+// Configs in Node side and Client side
+// ==============================================================
+
+export interface GitOptions extends GitTransfomerOptions {
+  /**
+   * Whether
+   *
+   *
+   *
+   */
+  contributors?: GitContributorsNodeOptions & GitContributorsClientOptions
+
+  /**
+   * Whether
+   *
+   *
+   *
+   */
+  changelog?: GitChangelogNodeOptions & GitChangelogClientOptions
+
+  /**
+   * Localization config
+   *
+   * 本地化配置
+   */
+  locales?: GitLocalesOptions
+}
+
+// ==============================================================
+// Configs in Node side
+// ==============================================================
 
 /**
  * Contributor information
@@ -81,7 +127,7 @@ export interface ContributorInfo {
   url?: string
 }
 
-export interface ContributorsOptions {
+export interface GitContributorsNodeOptions {
   /**
    * Contributors Information
    *
@@ -114,10 +160,10 @@ export interface ContributorsOptions {
    *
    * 贡献者转换函数，例如去重和排序
    */
-  transform?: (contributors: GitContributorInfo[]) => GitContributorInfo[]
+  transform?: (contributors: GitContributorData[]) => GitContributorData[]
 }
 
-export interface ChangelogOptions {
+export interface GitChangelogNodeOptions {
   /**
    * Maximum number of changelog
    *
@@ -181,13 +227,7 @@ export interface ChangelogOptions {
   tagUrlPattern?: string
 }
 
-export interface GitPluginForTransfomerOptions {
-  /**
-   * Page filter, if it returns `true`, the page will collect git information.
-   *
-   * 页面过滤器，如果返回 `true`，该页面将收集 git 信息
-   */
-  filter?: (page: PageData) => boolean
+interface GitFeatures {
   /**
    * Whether to get the created time of a page
    *
@@ -213,7 +253,7 @@ export interface GitPluginForTransfomerOptions {
    *
    * @default true
    */
-  contributors?: ContributorsOptions | boolean
+  contributors?: boolean
 
   /**
    * Whether to get the changelog of a page
@@ -222,5 +262,41 @@ export interface GitPluginForTransfomerOptions {
    *
    * @default true
    */
-  changelog?: ChangelogOptions | boolean
+  changelog?: boolean
+}
+
+export interface GitTransfomerOptions {
+  /**
+   * Page filter, if it returns `true`, the page will collect git information.
+   *
+   * 页面过滤器，如果返回 `true`，该页面将收集 git 信息
+   */
+  filter?: (page: PageData) => boolean
+
+  /**
+   * 包括额外的页面
+   *
+   * 将其他文件的 Git 信息附加在此页面上
+   */
+  include?: (page: PageData) => string[]
+
+  features?: GitFeatures
+
+  /**
+   * Whether to get the contributors of a page
+   *
+   * 是否收集页面的贡献者
+   *
+   * @default true
+   */
+  contributors?: GitContributorsNodeOptions
+
+  /**
+   * Whether to get the changelog of a page
+   *
+   * 是否收集页面的变更历史记录
+   *
+   * @default true
+   */
+  changelog?: GitChangelogNodeOptions
 }

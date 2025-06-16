@@ -33,6 +33,17 @@ export default defineConfig({
     ],
 
   },
+  locales: {
+    root: {
+      label: 'English',
+      lang: 'en-US',
+    },
+    zh: {
+      label: '简体中文',
+      lang: 'zh-CN',
+    },
+  },
+
   vite: {
     plugins: [
       // Inspect(),
@@ -42,6 +53,7 @@ export default defineConfig({
         },
         changelog: {
           repoUrl: 'https://github.com/northword/vitepress-plugin-git',
+          relativeTime: true,
         },
       }),
     ],
