@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useToggle } from '@vueuse/core'
 import { useChangelog, useLastUpdated, useLocale } from '../composables'
+import { useTimeAgoIntl } from '../composables/useTimeAgoIntl'
+import { gitClientOptions } from '../options'
 import GitChangelogCommitLine from './GitChangelogCommitLine.vue'
 import GitChangelogTagLine from './GitChangelogTagLine.vue'
 import VerticalTransition from './VerticalTransition.vue'
@@ -8,6 +10,7 @@ import VPHeader from './VPHeader.vue'
 
 const changelog = useChangelog()
 const lastUpdated = useLastUpdated()
+const timeAgo = useTimeAgoIntl(lastUpdated.value.date, { insertSpace: true })
 const locale = useLocale()
 const [active, toggleActive] = useToggle()
 </script>
@@ -19,7 +22,7 @@ const [active, toggleActive] = useToggle()
     <div class="vp-changelog-header" @click="toggleActive()">
       <div class="vp-latest-updated">
         <span class="vp-changelog-icon" />
-        <span data-allow-mismatch>{{ lastUpdated?.text }}</span>
+        <span data-allow-mismatch>{{ locale.latestUpdateAt }} {{ gitClientOptions.changelog?.relativeTime ? timeAgo : lastUpdated?.text }}</span>
       </div>
       <div class="vp-changelog-show-more">
         <span class="vp-changelog-menu-icon" />

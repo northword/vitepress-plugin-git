@@ -21,18 +21,13 @@ export interface LastUpdated {
   locale: string
 }
 
-export function useLastUpdated(): ComputedRef<LastUpdated | null> {
+export function useLastUpdated(): ComputedRef<LastUpdated> {
   const { lang, page } = useData()
 
   return computed(() => {
-    if (!page.value.git.updatedTime)
-      return null
-
-    const timeStamp
-      = page.value.git.updatedTime ?? page.value.git.changelog?.[0].time
-
-    if (!timeStamp)
-      return null
+    const timeStamp = page.value.git.updatedTime
+      ?? page.value.git.changelog?.[0].time
+      ?? new Date()
 
     const date = new Date(timeStamp)
 
