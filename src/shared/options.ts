@@ -12,6 +12,7 @@ export interface GitClientOptions {
 
 export interface GitChangelogClientOptions {
   relativeTime?: boolean
+  inlineAuthors?: boolean
 }
 
 export interface GitContributorsClientOptions {

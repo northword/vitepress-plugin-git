@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useContributors, useLocale } from '../composables'
-import GitContributor from './GitContributor.vue'
+import Authors from './Authors.vue'
 import VPHeader from './VPHeader.vue'
 
 const contributors = useContributors()
@@ -12,11 +12,7 @@ const locale = useLocale()
 
   <template v-if="contributors.length">
     <div class="vp-contributors">
-      <GitContributor
-        v-for="contributor in contributors"
-        :key="contributor.name"
-        v-bind="contributor"
-      />
+      <Authors :authors="contributors" mode="grid" />
     </div>
   </template>
 

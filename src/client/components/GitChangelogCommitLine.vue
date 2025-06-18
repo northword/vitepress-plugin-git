@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { GitChangelogItem } from '../composables/useChangelog'
 import { useLocale } from '../composables'
+import { gitClientOptions } from '../options'
+import Authors from './Authors.vue'
 
 defineProps<{
   item: GitChangelogItem
@@ -21,15 +23,18 @@ const locale = useLocale()
       <code>{{ item.hash.slice(0, 7) }}</code>
     </component>
     <span class="vp-changelog-divider">-</span>
-    <span class="vp-changelog-message" v-html="item.message" />
-    <span class="vp-changelog-date" data-allow-mismatch>
-      {{ locale.timeOn }}
-      <time :datetime="new Date(item.time).toISOString()">{{ item.date }}</time>
+    <span class="vp-changelog-details">
+      <span class="vp-changelog-message" v-html="item.message" />
+      <Authors v-if="gitClientOptions.changelog?.inlineAuthors" class="vp-changelog-inline-contributors" :authors="[{ name: item.author }]" mode="inline" />
+      <span class="vp-changelog-date" data-allow-mismatch>
+        {{ locale.timeOn }}
+        <time :datetime="new Date(item.time).toISOString()">{{ item.date }}</time>
+      </span>
     </span>
   </div>
 </template>
 
-<style>
+<style scoped>
 .vp-changelog-item-commit::before {
   content: '';
   position: absolute;
@@ -43,17 +48,12 @@ const locale = useLocale()
   mask-size: 100% 100%;
 }
 
-.vp-changelog-hash {
-  margin-inline-end: 4px;
+.vp-changelog-item-commit > * {
+    margin-inline-end: 8px;
 }
 
-.vp-changelog-divider {
-  margin-inline-end: 8px;
-}
-
-.vp-changelog-message {
-  margin-inline-end: 8px;
-  line-height: 1.7;
+.vp-changelog-details > * {
+    margin-inline-end: 8px;
 }
 
 .vp-changelog-date {

@@ -22,6 +22,7 @@ export function resolveClientOptions(options: GitOptions): GitClientOptions {
     },
     changelog: {
       relativeTime: options.changelog?.relativeTime,
+      inlineAuthors: options.changelog?.inlineAuthors,
     },
     locales: options.locales,
   }

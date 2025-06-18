@@ -54,6 +54,7 @@ export default defineConfig({
         changelog: {
           repoUrl: 'https://github.com/northword/vitepress-plugin-git',
           relativeTime: true,
+          inlineAuthors: true,
         },
       }),
     ],
