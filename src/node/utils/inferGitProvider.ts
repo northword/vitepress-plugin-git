@@ -1,6 +1,10 @@
 import type { ExecSyncOptionsWithStringEncoding } from 'node:child_process' // Import native execSync
-import type { KnownGitProvider } from '../../shared'
 import { execSync } from 'node:child_process'
+
+/**
+ * Git provider
+ */
+export type KnownGitProvider = 'bitbucket' | 'gitee' | 'github' | 'gitlab'
 
 /**
  * Gets the URL of a Git remote.
