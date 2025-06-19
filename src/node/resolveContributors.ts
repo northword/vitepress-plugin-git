@@ -17,7 +17,9 @@ export function getContributorsFromCommit(commits: MergedRawCommit[]): RawContri
         email,
       },
       ...coAuthors,
-    ].map(c => ({ ...c, commits: 1 }))
+    ]
+      .filter(v => !(v.name.match(/\[bot\]/i) || v.email?.match(/\[bot\]/i)))
+      .map(c => ({ ...c, commits: 1 }))
   })
 }
 
