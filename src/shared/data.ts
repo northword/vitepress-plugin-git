@@ -1,7 +1,7 @@
-export interface GitPageData {
-  git: GitData
-  frontmatter: GitFrontmatter
-}
+// export interface GitPageData {
+//   git: GitData
+//   frontmatter: GitFrontmatter
+// }
 
 // ==============================================================
 // GitData
@@ -108,7 +108,7 @@ export interface GitCoAuthorData {
 // GitFrontmatter
 // ==============================================================
 export interface GitFrontmatter {
-  contributors: boolean
-  changelog: boolean
-  gitInclude: string[]
+  contributors?: boolean | string[]
+  changelog?: boolean
+  gitInclude?: string[]
 }
