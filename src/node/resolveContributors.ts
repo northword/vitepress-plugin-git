@@ -51,7 +51,7 @@ export function normalizeContributor(
   const username = info?.username ?? noreplyUsername
   const email = info?.email ?? raw.email
 
-  const avatar: string | undefined = options.avatar
+  const avatar: string | undefined = options.avatar ?? true
     ? getAvatar({ ...info, username, name, email }, options.avatarPattern)
     : undefined
 

@@ -126,7 +126,7 @@ export interface GitContributorsNodeOptions {
    *
    * 是否在贡献者信息中添加头像
    *
-   * @default false
+   * @default true
    */
   avatar?: boolean
 
