@@ -43,3 +43,8 @@ export interface RawCommit {
 export interface MergedRawCommit extends Omit<RawCommit, 'filepath'> {
   filepaths: string[]
 }
+
+/**
+ * Git provider
+ */
+export type KnownGitProvider = 'bitbucket' | 'gitee' | 'github' | 'gitlab'

@@ -49,11 +49,17 @@ export default defineConfig({
       // Inspect(),
       GitPluginForVite({
         contributors: {
-          info: [],
+          info: [
+            {
+              name: 'Northword',
+              username: 'northword',
+              // url: 'https://northword.cn',
+            },
+          ],
           avatar: true,
         },
         changelog: {
-          repoUrl: 'https://github.com/northword/vitepress-plugin-git',
+          // repoUrl: 'https://github.com/northword/vitepress-plugin-git',
           relativeTime: true,
           inlineAuthors: true,
         },

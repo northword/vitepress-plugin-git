@@ -1,9 +1,12 @@
 import type { Plugin } from 'vite'
 import type { GitOptions } from './options'
+import process from 'node:process'
 import { resolveChangelogClientOptions, resolveContributorsClientOptions, setGitOptions } from './options'
+import { checkGitRepo, inferGitInfo } from './utils'
 
-// Vite 插件，负责处理依赖和 Markdown Transfrom
-export function GitPluginForVite(options: GitOptions = {}): Plugin {
+export function GitPluginForVite(_options: GitOptions = {}): Plugin {
+  const options: GitOptions = _options
+
   return {
     name: 'vitepress-plugin-git',
     // May set to 'pre' since end user may use vitepress wrapped vite plugin to
@@ -12,9 +15,13 @@ export function GitPluginForVite(options: GitOptions = {}): Plugin {
     enforce: 'pre',
 
     buildStart() {
-      // resolve config
-
-      // check if the current directory is a git repository
+      const cwd = process.cwd()
+      const isGitRepoValid = checkGitRepo(cwd)
+      if (isGitRepoValid) {
+        const info = inferGitInfo(cwd)
+        options.changelog ??= {}
+        options.changelog.repoUrl ??= info.repoUrl ?? ''
+      }
     },
 
     config: () => ({

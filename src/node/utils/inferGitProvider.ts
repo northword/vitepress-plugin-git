@@ -1,10 +1,6 @@
 import type { ExecSyncOptionsWithStringEncoding } from 'node:child_process' // Import native execSync
+import type { KnownGitProvider } from '../typings'
 import { execSync } from 'node:child_process'
-
-/**
- * Git provider
- */
-export type KnownGitProvider = 'bitbucket' | 'gitee' | 'github' | 'gitlab'
 
 /**
  * Gets the URL of a Git remote.
@@ -47,12 +43,7 @@ export function getRemoteUrl(cwd: string): string | null {
   }
 }
 
-export function inferGitProvider(cwd: string): KnownGitProvider | null {
-  const remoteUrl = getRemoteUrl(cwd)
-
-  if (!remoteUrl)
-    return null
-
+export function inferGitProvider(remoteUrl: string): KnownGitProvider | null {
   if (remoteUrl.includes('github.com')) {
     return 'github'
   }
@@ -70,4 +61,23 @@ export function inferGitProvider(cwd: string): KnownGitProvider | null {
   }
 
   return null
+}
+
+export function inferRepoUrl(remoteUrl: string): string | null {
+  return remoteUrl.replace(/.git$/, '')
+}
+
+export function inferGitInfo(cwd: string): {
+  provider: KnownGitProvider | null
+  repoUrl: string | null
+} {
+  const remoteUrl = getRemoteUrl(cwd) ?? ''
+
+  const provider = inferGitProvider(remoteUrl)
+  const repoUrl = inferRepoUrl(remoteUrl)
+
+  return {
+    provider,
+    repoUrl,
+  }
 }

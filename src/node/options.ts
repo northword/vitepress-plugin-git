@@ -5,6 +5,7 @@ import type { MergedRawCommit } from './typings'
 // ==============================================================
 // helpers to store config
 // ==============================================================
+
 let _options: GitOptions = {}
 
 export function setGitOptions(options: GitOptions) {
@@ -267,21 +268,7 @@ export interface GitTransfomerOptions {
 
   features?: GitFeatures
 
-  /**
-   * Whether to get the contributors of a page
-   *
-   * 是否收集页面的贡献者
-   *
-   * @default true
-   */
   contributors?: GitContributorsNodeOptions
 
-  /**
-   * Whether to get the changelog of a page
-   *
-   * 是否收集页面的变更历史记录
-   *
-   * @default true
-   */
   changelog?: GitChangelogNodeOptions
 }
