@@ -1,4 +1,4 @@
-import type { ContributorsOptions, MergedRawCommit } from '../src'
+import type { GitContributorsNodeOptions, MergedRawCommit } from '../src'
 import { describe, expect, it } from 'vitest'
 import {
   getAvatar,
@@ -184,7 +184,7 @@ describe('resolveContributors', () => {
         coAuthors: [],
       },
     ]
-    const options: ContributorsOptions = {
+    const options: GitContributorsNodeOptions = {
       info: [],
       avatar: true,
       avatarPattern: 'https://cdn.avatar.com/:username.jpg',

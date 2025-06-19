@@ -5,6 +5,7 @@ import { GitPageDataTransfromer, GitPluginForVite } from 'vitepress-plugin-git'
 export default defineConfig({
   title: 'Vitepress Plugin Git',
   description: '.',
+  base: '/vitepress-plugin-git/',
   themeConfig: {
     socialLinks: [
       { icon: 'github', link: 'https://github.com/northword/vitepress-plugin-git' },
@@ -18,7 +19,6 @@ export default defineConfig({
         text: 'Guide',
         items: [
           { text: 'Getting Started', link: '/getting-started' },
-          { text: 'Features', link: '/features' },
         ],
       },
       {

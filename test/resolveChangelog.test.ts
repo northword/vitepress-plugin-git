@@ -1,5 +1,5 @@
-import type { ChangelogOptions, ContributorInfo, MergedRawCommit } from '../src'
-import type { GitChangelogInfo } from '../src/shared'
+import type { ContributorInfo, GitChangelogNodeOptions, MergedRawCommit } from '../src'
+import type { GitChangelogData } from '../src/shared'
 import { describe, expect, it } from 'vitest'
 import { resolveChangelog } from '../src/node/resolveChangelog'
 
@@ -23,7 +23,7 @@ export const baseContributors: ContributorInfo[] = [
   },
 ]
 
-export const baseOptions: ChangelogOptions = {
+export const baseOptions: GitChangelogNodeOptions = {
   repoUrl: 'https://github.com/my/repo',
   commitUrlPattern: ':repo/commit/:hash',
   issueUrlPattern: ':repo/issues/:issue',
@@ -39,7 +39,7 @@ describe('resolveChangelog', () => {
     }
     const result = resolveChangelog([fullCommit], baseOptions, baseContributors)
 
-    const expected: GitChangelogInfo = {
+    const expected: GitChangelogData = {
       hash: 'abcdefghigklmnopqrst',
       time: 1700000000000,
       email: 'alice@example.com',
@@ -86,7 +86,7 @@ describe('resolveChangelog', () => {
     }
     const options = {}
     const result = resolveChangelog([fullCommit], options, baseContributors)
-    const expected: GitChangelogInfo = {
+    const expected: GitChangelogData = {
       hash: 'abcdefghigklmnopqrst',
       time: 1700000000000,
       email: 'alice@example.com',
