@@ -1,5 +1,5 @@
 import type { PageData } from 'vitepress'
-import type { GitClientOptions, GitContributorData } from '../shared'
+import type { GitChangelogClientOptions, GitClientOptions, GitContributorData, GitContributorsClientOptions } from '../shared'
 import type { MergedRawCommit } from './typings'
 
 // ==============================================================
@@ -15,16 +15,23 @@ export function getGitOptions(): GitOptions {
   return _options
 }
 
-export function resolveClientOptions(options: GitOptions): GitClientOptions {
+export function resolveContributorsClientOptions(options: GitOptions): Required<GitContributorsClientOptions> {
+  const { contributors = {} } = options
   return {
-    contributors: {
-      avatar: options.contributors?.avatar,
-    },
-    changelog: {
-      relativeTime: options.changelog?.relativeTime,
-      inlineAuthors: options.changelog?.inlineAuthors,
-    },
-    locales: options.locales,
+    avatar: contributors.avatar ?? true,
+    hideHeader: contributors.hideHeader ?? false,
+    hideEmptyText: contributors.hideEmptyText ?? false,
+  }
+}
+
+export function resolveChangelogClientOptions(options: GitOptions): Required<GitChangelogClientOptions> {
+  const { changelog = {} } = options
+  return {
+    relativeTime: changelog.relativeTime ?? false,
+    inlineAuthors: changelog.inlineAuthors ?? false,
+    numCommitHashLetters: changelog.numCommitHashLetters ?? 7,
+    hideHeader: changelog.hideHeader ?? false,
+    hideEmptyText: changelog.hideEmptyText ?? false,
   }
 }
 

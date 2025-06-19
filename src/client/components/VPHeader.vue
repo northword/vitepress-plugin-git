@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   text: string
   anchor: string
   level?: number
@@ -7,7 +7,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <component :is="`h${props.level ?? 2}`" :id="anchor" tabindex="-1">
+  <component :is="`h${level ?? 2}`" :id="anchor" tabindex="-1">
     {{ text }}
     <a :href="`#${anchor}`" class="header-anchor" :aria-label="`Permalink to '${anchor}'`" />
   </component>

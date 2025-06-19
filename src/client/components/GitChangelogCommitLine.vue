@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { GitChangelogItem } from '../composables/useChangelog'
 import { useLocale } from '../composables'
-import { gitClientOptions } from '../options'
 import Authors from './Authors.vue'
 
 defineProps<{
   item: GitChangelogItem
+  inlineAuthors?: boolean
+  numCommitHashLetters?: number
 }>()
 
 const locale = useLocale()
@@ -13,6 +14,7 @@ const locale = useLocale()
 
 <template>
   <div class="vp-changelog-item-commit">
+    <span class="vp-changelog-icon" />
     <component
       :is="item.commitUrl ? 'a' : 'span'"
       class="vp-changelog-hash"
@@ -20,12 +22,12 @@ const locale = useLocale()
       target="_blank"
       rel="noreferrer"
     >
-      <code>{{ item.hash.slice(0, 7) }}</code>
+      <code>{{ item.hash.slice(0, numCommitHashLetters) }}</code>
     </component>
     <span class="vp-changelog-divider">-</span>
     <span class="vp-changelog-details">
       <span class="vp-changelog-message" v-html="item.message" />
-      <Authors v-if="gitClientOptions.changelog?.inlineAuthors" class="vp-changelog-inline-contributors" :authors="[{ name: item.author }]" mode="inline" />
+      <Authors v-if="inlineAuthors" class="vp-changelog-inline-contributors" :authors="[{ name: item.author }]" mode="inline" />
       <span class="vp-changelog-date" data-allow-mismatch>
         {{ locale.timeOn }}
         <time :datetime="new Date(item.time).toISOString()">{{ item.date }}</time>
@@ -35,9 +37,8 @@ const locale = useLocale()
 </template>
 
 <style scoped>
-.vp-changelog-item-commit::before {
+.vp-changelog-icon {
   content: '';
-  position: absolute;
   top: 3px;
   left: 0;
   display: inline-block;

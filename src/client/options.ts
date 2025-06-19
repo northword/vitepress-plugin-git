@@ -1,7 +1,10 @@
-import type { InjectionKey } from 'vue'
-import type { GitClientOptions } from '../shared'
+import type { GitChangelogClientOptions, GitContributorsClientOptions, GitLocalesOptions } from '../shared'
 
-export const gitInjectionKey: InjectionKey<GitClientOptions> = Symbol('vitepress-plugin-git')
+declare const __GIT_CONTRIBUTORS_OPTIONS__: GitContributorsClientOptions
+export const contributorsOptions = __GIT_CONTRIBUTORS_OPTIONS__
 
-declare const __GIT_OPTIONS__: GitClientOptions
-export const gitClientOptions = __GIT_OPTIONS__
+declare const __GIT_CHANGELOG_OPTIONS__: GitChangelogClientOptions
+export const changelogOptions = __GIT_CHANGELOG_OPTIONS__
+
+declare const __GIT_LOCALES__: GitLocalesOptions
+export const localesOptions = __GIT_LOCALES__ ?? {}

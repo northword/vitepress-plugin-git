@@ -6,7 +6,7 @@ export const defaultLocaleEn: GitLocaleData = {
   noContributors: 'No contributors',
   timeOn: 'on',
   viewChangelog: 'View All Changelog',
-  latestUpdateAt: 'Last Updated:',
+  latestUpdateAt: 'Last updated:',
   noChangelog: 'No Changelog',
 }
 

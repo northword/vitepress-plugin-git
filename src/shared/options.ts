@@ -2,7 +2,7 @@
 // Configs in Client side
 // ==============================================================
 
-import type { GitLocalesOptions } from './locale'
+import type { GitLocaleData } from './locale'
 
 export interface GitClientOptions {
   contributors?: GitContributorsClientOptions
@@ -20,6 +20,7 @@ export interface GitChangelogClientOptions {
   relativeTime?: boolean
   inlineAuthors?: boolean
   hideEmptyText?: boolean
+  numCommitHashLetters?: number
 }
 
 export interface GitContributorsClientOptions {
@@ -27,3 +28,5 @@ export interface GitContributorsClientOptions {
   avatar?: boolean
   hideEmptyText?: boolean
 }
+
+export type GitLocalesOptions = Record<string, Partial<GitLocaleData>>

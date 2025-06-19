@@ -30,4 +30,3 @@ export interface GitLocaleData {
 }
 
 export type GitLocales = Record<string, GitLocaleData>
-export type GitLocalesOptions = Record<string, Partial<GitLocaleData>>

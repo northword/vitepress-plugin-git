@@ -2,7 +2,7 @@
 import { useToggle } from '@vueuse/core'
 import { useChangelog, useLastUpdated, useLocale } from '../composables'
 import { useTimeAgoIntl } from '../composables/useTimeAgoIntl'
-import { gitClientOptions } from '../options'
+import { changelogOptions as options } from '../options'
 import GitChangelogCommitLine from './GitChangelogCommitLine.vue'
 import GitChangelogTagLine from './GitChangelogTagLine.vue'
 import VerticalTransition from './VerticalTransition.vue'
@@ -17,7 +17,7 @@ const [active, toggleActive] = useToggle()
 
 <template>
   <VPHeader
-    v-if="!gitClientOptions.changelog?.hideHeader"
+    v-if="!options.hideHeader"
     anchor="doc-changelog"
     :text="locale.changelog"
   />
@@ -28,7 +28,7 @@ const [active, toggleActive] = useToggle()
         <span class="vp-changelog-icon" />
         <span data-allow-mismatch>
           {{ locale.latestUpdateAt }}
-          {{ gitClientOptions.changelog?.relativeTime ? timeAgo : lastUpdated?.text }}
+          {{ options.relativeTime ? timeAgo : lastUpdated?.text }}
         </span>
       </div>
       <div class="vp-changelog-show-more">
@@ -41,13 +41,17 @@ const [active, toggleActive] = useToggle()
       <div v-show="active" class="vp-changelog-list">
         <template v-for="item in changelog" :key="item.hash">
           <GitChangelogTagLine v-if="item.tag" :item="item" />
-          <GitChangelogCommitLine v-else :item="item" />
+          <GitChangelogCommitLine
+            v-else :item="item"
+            :inline-authors="options.inlineAuthors"
+            :num-commit-hash-letters="options.numCommitHashLetters"
+          />
         </template>
       </div>
     </VerticalTransition>
   </div>
 
-  <div v-else-if="!gitClientOptions.changelog?.hideEmptyText" class="vp-changelog-empty">
+  <div v-else-if="!options.hideEmptyText" class="vp-changelog-empty">
     <p>{{ locale.noChangelog }}</p>
   </div>
 </template>

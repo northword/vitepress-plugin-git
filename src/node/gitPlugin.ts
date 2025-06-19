@@ -1,6 +1,6 @@
 import type { Plugin } from 'vite'
 import type { GitOptions } from './options'
-import { resolveClientOptions, setGitOptions } from './options'
+import { resolveChangelogClientOptions, resolveContributorsClientOptions, setGitOptions } from './options'
 
 // Vite 插件，负责处理依赖和 Markdown Transfrom
 export function GitPluginForVite(options: GitOptions = {}): Plugin {
@@ -19,7 +19,10 @@ export function GitPluginForVite(options: GitOptions = {}): Plugin {
 
     config: () => ({
       define: {
-        __GIT_OPTIONS__: resolveClientOptions(options),
+        __GIT_FEATURES__: {},
+        __GIT_CONTRIBUTORS_OPTIONS__: resolveContributorsClientOptions(options),
+        __GIT_CHANGELOG_OPTIONS__: resolveChangelogClientOptions(options),
+        __GIT_LOCALES__: options.locales || {},
       },
       optimizeDeps: {
         include: ['@vueuse/core'],
