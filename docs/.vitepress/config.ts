@@ -49,6 +49,7 @@ export default defineConfig({
       // Inspect(),
       GitPluginForVite({
         contributors: {
+          info: [],
           avatar: true,
         },
         changelog: {
@@ -56,6 +57,7 @@ export default defineConfig({
           relativeTime: true,
           inlineAuthors: true,
         },
+        locales: {},
       }),
     ],
   },

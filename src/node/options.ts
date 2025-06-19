@@ -1,5 +1,5 @@
 import type { PageData } from 'vitepress'
-import type { GitChangelogClientOptions, GitClientOptions, GitContributorData, GitContributorsClientOptions, GitLocalesOptions } from '../shared'
+import type { GitClientOptions, GitContributorData } from '../shared'
 import type { MergedRawCommit } from './typings'
 
 // ==============================================================
@@ -32,30 +32,7 @@ export function resolveClientOptions(options: GitOptions): GitClientOptions {
 // Configs in Node side and Client side
 // ==============================================================
 
-export interface GitOptions extends GitTransfomerOptions {
-  /**
-   * Whether
-   *
-   *
-   *
-   */
-  contributors?: GitContributorsNodeOptions & GitContributorsClientOptions
-
-  /**
-   * Whether
-   *
-   *
-   *
-   */
-  changelog?: GitChangelogNodeOptions & GitChangelogClientOptions
-
-  /**
-   * Localization config
-   *
-   * 本地化配置
-   */
-  locales?: GitLocalesOptions
-}
+export type GitOptions = GitTransfomerOptions & GitClientOptions
 
 // ==============================================================
 // Configs in Node side

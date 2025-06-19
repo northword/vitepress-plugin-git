@@ -5,8 +5,13 @@
 import type { GitLocalesOptions } from './locale'
 
 export interface GitClientOptions {
-  changelog?: GitChangelogClientOptions
   contributors?: GitContributorsClientOptions
+  changelog?: GitChangelogClientOptions
+  /**
+   * Locales options
+   *
+   * 本地化配置
+   */
   locales?: GitLocalesOptions
 }
 
