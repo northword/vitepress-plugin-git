@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import { useData } from 'vitepress'
-import { defineAsyncComponent } from 'vue'
+import GitChangelog from './GitChangelog.vue'
+import GitContributors from './GitContributors.vue'
 
 const { page } = useData()
-
-const GitContributors = defineAsyncComponent(() =>
-  import('./GitContributors.vue'),
-)
-const GitChangelog = defineAsyncComponent(() =>
-  import('./GitChangelog.vue'),
-)
 </script>
 
 <template>
