@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useContributors, useLocale } from '../composables'
+import { gitClientOptions } from '../options'
 import Authors from './Authors.vue'
 import VPHeader from './VPHeader.vue'
 
@@ -8,7 +9,11 @@ const locale = useLocale()
 </script>
 
 <template>
-  <VPHeader anchor="git-contributors" :text="locale.contributors" />
+  <VPHeader
+    v-if="!gitClientOptions.contributors?.hideHeader"
+    anchor="git-contributors"
+    :text="locale.contributors"
+  />
 
   <template v-if="contributors.length">
     <div class="vp-contributors">
@@ -16,7 +21,7 @@ const locale = useLocale()
     </div>
   </template>
 
-  <template v-else>
+  <template v-else-if="!gitClientOptions.contributors?.hideEmptyText">
     <p class="vp-contributors-empty">
       {{ locale.noContributors }}
     </p>

@@ -16,10 +16,14 @@ export interface GitClientOptions {
 }
 
 export interface GitChangelogClientOptions {
+  hideHeader?: boolean
   relativeTime?: boolean
   inlineAuthors?: boolean
+  hideEmptyText?: boolean
 }
 
 export interface GitContributorsClientOptions {
+  hideHeader?: boolean
   avatar?: boolean
+  hideEmptyText?: boolean
 }

@@ -16,7 +16,11 @@ const [active, toggleActive] = useToggle()
 </script>
 
 <template>
-  <VPHeader anchor="doc-changelog" :text="locale.changelog" />
+  <VPHeader
+    v-if="!gitClientOptions.changelog?.hideHeader"
+    anchor="doc-changelog"
+    :text="locale.changelog"
+  />
 
   <div v-if="changelog.length" class="vp-changelog-wrapper" :class="{ active }">
     <div class="vp-changelog-header" @click="toggleActive()">
@@ -40,7 +44,7 @@ const [active, toggleActive] = useToggle()
     </VerticalTransition>
   </div>
 
-  <div v-else class="vp-changelog-empty">
+  <div v-else-if="!gitClientOptions.changelog?.hideEmptyText" class="vp-changelog-empty">
     <p>{{ locale.noChangelog }}</p>
   </div>
 </template>
