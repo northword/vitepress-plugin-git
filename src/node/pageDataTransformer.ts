@@ -1,5 +1,6 @@
 import type { PageData, TransformPageContext } from 'vitepress'
 import type { GitTransfomerOptions } from './options'
+import fs from 'node:fs'
 import path from 'node:path'
 import { getGitOptions } from './options'
 import { resolveChangelog } from './resolveChangelog'
@@ -34,15 +35,24 @@ export async function GitPageDataTransfromer(
   // process the extra included files
   const srcDir = context.siteConfig.srcDir
   const filepath = path.join(srcDir, page.filePath)
-  const filePaths = [
-    filepath,
-    ...(page.frontmatter.gitInclude as string[] ?? []).map(item =>
-      path.join(filepath, '..', item),
-    ),
+  const pageDir = path.dirname(filepath)
+
+  const extraPaths: string[] = [
+    ...page.frontmatter.gitInclude as string[] ?? [],
+    ...(options.include ? options.include(page) : []),
   ]
+    .flatMap((p) => {
+      if (p === '$DIR/*') {
+        return fs.readdirSync(pageDir)
+          .filter(name => name !== path.basename(filepath))
+          .map(name => path.join(pageDir, name))
+          .filter(fullPath => fs.statSync(fullPath).isFile())
+      }
+      return path.join(pageDir, p)
+    })
 
   // Collect the raw commits for this page
-  const commits = await getCommits(filePaths)
+  const commits = await getCommits([filepath, ...extraPaths])
 
   if (commits.length === 0) {
     page.git = {
