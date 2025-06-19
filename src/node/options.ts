@@ -1,6 +1,5 @@
 import type { PageData } from 'vitepress'
 import type { GitChangelogClientOptions, GitClientOptions, GitContributorData, GitContributorsClientOptions } from '../shared'
-import type { MergedRawCommit } from './typings'
 
 // ==============================================================
 // helpers to store config
@@ -160,11 +159,11 @@ export interface GitChangelogNodeOptions {
   maxCount?: number
 
   /**
-   * The url of the git repository, e.g: https://github.com/vuepress/ecosystem
+   * The url of the git repository, e.g: https://github.com/northword/vitepress-plugin-git
    *
-   * git 仓库的访问地址，例如：https://github.com/vuepress/ecosystem
+   * git 仓库的访问地址，例如：https://github.com/northword/vitepress-plugin-git
    */
-  repoUrl?: string | ((commit: MergedRawCommit) => string | undefined | void)
+  repoUrl?: string | ((page: PageData) => string | undefined | void)
 
   /**
    * Commit url pattern

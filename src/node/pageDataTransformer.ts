@@ -90,6 +90,7 @@ export async function GitPageDataTransfromer(
       commits,
       changelogOptions,
       contributorsOptions.info ?? [],
+      page,
     )
   }
 

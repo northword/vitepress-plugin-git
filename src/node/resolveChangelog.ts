@@ -1,3 +1,4 @@
+import type { PageData } from 'vitepress'
 import type { GitChangelogData } from '../shared'
 import type { ContributorInfo, GitChangelogNodeOptions } from './options'
 import type { MergedRawCommit } from './typings'
@@ -19,9 +20,9 @@ function parseTagName(refs: string): string | undefined {
   return tag?.replace('tag:', '').trim() || ''
 }
 
-function resolveRepoUrl(repoUrl: GitChangelogNodeOptions['repoUrl'], commit: MergedRawCommit): string | undefined {
+function resolveRepoUrl(repoUrl: GitChangelogNodeOptions['repoUrl'], page: PageData): string | undefined {
   if (typeof repoUrl === 'function')
-    return repoUrl(commit) ?? undefined
+    return repoUrl(page) ?? undefined
   if (typeof repoUrl === 'string')
     return repoUrl
   return undefined
@@ -48,6 +49,7 @@ export function resolveChangelog(
   commits: MergedRawCommit[],
   options: GitChangelogNodeOptions,
   contributors: ContributorInfo[],
+  page: PageData,
 ): GitChangelogData[] {
   const {
     maxCount = 100,
@@ -79,7 +81,7 @@ export function resolveChangelog(
     if (tag)
       resolved.tag = tag
 
-    const repo = resolveRepoUrl(repoUrl, commit)
+    const repo = resolveRepoUrl(repoUrl, page)
 
     if (repo) {
       resolved.message = replaceIssueLinks(resolved.message, repo, issueUrlPattern)
