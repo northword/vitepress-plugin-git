@@ -26,7 +26,10 @@ const [active, toggleActive] = useToggle()
     <div class="vp-changelog-header" @click="toggleActive()">
       <div class="vp-latest-updated">
         <span class="vp-changelog-icon" />
-        <span data-allow-mismatch>{{ locale.latestUpdateAt }} {{ gitClientOptions.changelog?.relativeTime ? timeAgo : lastUpdated?.text }}</span>
+        <span data-allow-mismatch>
+          {{ locale.latestUpdateAt }}
+          {{ gitClientOptions.changelog?.relativeTime ? timeAgo : lastUpdated?.text }}
+        </span>
       </div>
       <div class="vp-changelog-show-more">
         <span class="vp-changelog-menu-icon" />
