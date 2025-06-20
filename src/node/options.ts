@@ -1,17 +1,24 @@
 import type { PageData } from 'vitepress'
 import type { GitChangelogClientOptions, GitClientOptions, GitContributorData, GitContributorsClientOptions } from '../shared'
+import { logger } from './utils'
 
 // ==============================================================
 // helpers to store config
 // ==============================================================
 
-let _options: GitOptions = {}
+let _options: GitOptions | undefined
 
 export function setGitOptions(options: GitOptions) {
   _options = options
 }
 
 export function getGitOptions(): GitOptions {
+  if (!_options) {
+    logger.warn(`No configuration is initialized, 
+      make sure you have added the Vite plugin, 
+      or add a configuration in GitPageDataTransformer.`)
+    _options = {}
+  }
   return _options
 }
 
