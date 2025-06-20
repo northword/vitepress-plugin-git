@@ -1,3 +1,4 @@
+import type { PageData } from 'vitepress'
 import type { ContributorInfo, GitChangelogNodeOptions, MergedRawCommit } from '../src'
 import type { GitChangelogData } from '../src/shared'
 import { describe, expect, it } from 'vitest'
@@ -14,6 +15,10 @@ export const baseCommit: MergedRawCommit = {
   refs: '',
   coAuthors: [],
 }
+
+export const basePageData = {
+  filePath: 'file/to/path1',
+} as PageData
 
 export const baseContributors: ContributorInfo[] = [
   {
@@ -37,7 +42,7 @@ describe('resolveChangelog', () => {
       message: 'feat: init commit (#123)',
       refs: 'tag: v1.0.0',
     }
-    const result = resolveChangelog([fullCommit], baseOptions, baseContributors)
+    const result = resolveChangelog([fullCommit], baseOptions, baseContributors, basePageData)
 
     const expected: GitChangelogData = {
       hash: 'abcdefghigklmnopqrst',
@@ -56,7 +61,7 @@ describe('resolveChangelog', () => {
 
   it('handles commit with no tag', () => {
     const commit = { ...baseCommit, refs: '' }
-    const result = resolveChangelog([commit], baseOptions, baseContributors)
+    const result = resolveChangelog([commit], baseOptions, baseContributors, basePageData)
     expect(result[0].tag).toBeUndefined()
     expect(result[0].tagUrl).toBeUndefined()
   })
@@ -67,13 +72,13 @@ describe('resolveChangelog', () => {
       ...baseCommit,
       coAuthors,
     }
-    const result = resolveChangelog([commit], baseOptions, baseContributors)
+    const result = resolveChangelog([commit], baseOptions, baseContributors, basePageData)
     expect(result[0].coAuthors).toEqual(coAuthors)
   })
 
   it('uses fallback author and email if no contributor matched', () => {
     const commit = { ...baseCommit, email: 'unknown@example.com' }
-    const result = resolveChangelog([commit], baseOptions, [])
+    const result = resolveChangelog([commit], baseOptions, [], basePageData)
     expect(result[0].author).toBe('Alice') // fallback to commit.author
     expect(result[0].email).toBe('unknown@example.com')
   })
@@ -85,7 +90,7 @@ describe('resolveChangelog', () => {
       refs: 'tag: v1.0.0',
     }
     const options = {}
-    const result = resolveChangelog([fullCommit], options, baseContributors)
+    const result = resolveChangelog([fullCommit], options, baseContributors, basePageData)
     const expected: GitChangelogData = {
       hash: 'abcdefghigklmnopqrst',
       time: 1700000000000,
@@ -100,10 +105,10 @@ describe('resolveChangelog', () => {
   it('supports functional repoUrl', () => {
     const options = {
       ...baseOptions,
-      repoUrl: (commit: any) => `https://gitlab.com/myproj/${commit.hash}`,
+      repoUrl: () => `https://gitlab.com/myproj/repo`,
     }
-    const result = resolveChangelog([baseCommit], options, baseContributors)
-    expect(result[0].commitUrl).toBe('https://gitlab.com/myproj/abcdefghigklmnopqrst/commit/abcdefghigklmnopqrst')
+    const result = resolveChangelog([baseCommit], options, baseContributors, basePageData)
+    expect(result[0].commitUrl).toBe('https://gitlab.com/myproj/repo/commit/abcdefghigklmnopqrst')
   })
 
   it('respects maxCount', () => {
@@ -113,7 +118,7 @@ describe('resolveChangelog', () => {
       { ...baseCommit, hash: '3' },
     ]
 
-    const result = resolveChangelog(commits, { ...baseOptions, maxCount: 2 }, baseContributors)
+    const result = resolveChangelog(commits, { ...baseOptions, maxCount: 2 }, baseContributors, basePageData)
     expect(result).toHaveLength(2)
     expect(result.map(c => c.hash)).toEqual(['1', '2'])
   })
