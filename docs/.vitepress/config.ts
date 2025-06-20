@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { GitPageDataTransfromer, GitPluginForVite } from 'vitepress-plugin-git'
+import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -44,6 +45,15 @@ export default defineConfig({
     },
   },
 
+  markdown: {
+    config(md) {
+      md.use(groupIconMdPlugin)
+    },
+    codeTransformers: [
+      // transformerTwoslash(),
+    ],
+  },
+
   vite: {
     plugins: [
       // Inspect(),
@@ -65,6 +75,8 @@ export default defineConfig({
         },
         locales: {},
       }),
+
+      groupIconVitePlugin(),
     ],
   },
 
