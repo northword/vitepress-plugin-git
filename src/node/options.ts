@@ -25,7 +25,6 @@ export function getGitOptions(): GitOptions {
 export function resolveContributorsClientOptions(options: GitOptions): Required<GitContributorsClientOptions> {
   const { contributors = {} } = options
   return {
-    avatar: contributors.avatar ?? true,
     hideHeader: contributors.hideHeader ?? false,
     hideEmptyText: contributors.hideEmptyText ?? false,
   }
@@ -126,15 +125,6 @@ export interface GitContributorsNodeOptions {
    * 贡献者信息
    */
   info?: ContributorInfo[]
-
-  /**
-   * Whether to add avatar in contributor information
-   *
-   * 是否在贡献者信息中添加头像
-   *
-   * @default true
-   */
-  avatar?: boolean
 
   /**
    * Avatar url pattern

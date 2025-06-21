@@ -56,14 +56,13 @@ const [active, toggleActive] = useToggle()
   </div>
 </template>
 
-<style>
+<style scoped>
 .vp-changelog-wrapper {
   margin-block: 1rem;
   padding-inline: 1rem;
   border-radius: 8px;
   background-color: var(--vp-custom-block-details-bg);
-  font-size: 0.875rem;
-  line-height: 1.7;
+  font-size: var(--vp-custom-block-font-size);
 }
 
 .vp-changelog-wrapper.active {
@@ -86,7 +85,6 @@ const [active, toggleActive] = useToggle()
   font-weight: bold;
   cursor: pointer;
   color: var(--vp-custom-block-details-text);
-  font-size: var(--vp-custom-block-font-size);
 }
 
 .vp-changelog-header:hover {
@@ -103,8 +101,9 @@ const [active, toggleActive] = useToggle()
 .vp-changelog-menu-icon {
   display: inline-block;
   vertical-align: middle;
-  width: 1.2em;
-  height: 1.2em;
+  width: 1.75em;
+  height: 1.25em;
+  flex-shrink: 0;
   margin-inline-end: 0.5rem;
   background-color: currentcolor;
   mask: var(--icon) no-repeat;
@@ -121,9 +120,9 @@ const [active, toggleActive] = useToggle()
 }
 
 .vp-changelog-list {
-  list-style: none;
-  margin-block: 0.5rem;
-  padding-inline-start: 0;
-  overflow: hidden;
+  display: grid;
+  /* flex-direction: column; */
+  gap: 0.375rem;
+  grid-template-columns: 30px auto;
 }
 </style>

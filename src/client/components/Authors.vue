@@ -28,8 +28,7 @@ defineProps<{
         :key="a.name"
         :name="a.name"
         :src="a.avatar"
-        :style="{ zIndex: authors.length - i, marginLeft: i ? '-10px' : '0' }"
-        class="item"
+        :style="{ zIndex: authors.length - i, marginLeft: i ? '-0.5rem' : '0' }"
       />
     </template>
   </div>
@@ -58,6 +57,7 @@ defineProps<{
 
 .inline {
   display: inline-flex;
+  vertical-align: middle;
 }
 
 .inline .avatar {

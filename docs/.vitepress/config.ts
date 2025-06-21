@@ -12,6 +12,7 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/northword/vitepress-plugin-git' },
     ],
+    outline: 'deep',
   },
   locales: {
     root: {
@@ -78,7 +79,6 @@ export default defineConfig({
               // url: 'https://northword.cn',
             },
           ],
-          avatar: true,
         },
         changelog: {
           // repoUrl: 'https://github.com/northword/vitepress-plugin-git',

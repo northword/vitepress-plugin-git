@@ -16,8 +16,8 @@ const authors = [props.item.author, ...props.item.coAuthors?.map(c => c.name) ??
 </script>
 
 <template>
+  <span class="vp-changelog-icon" />
   <div class="vp-changelog-item-commit">
-    <span class="vp-changelog-icon" />
     <component
       :is="item.commitUrl ? 'a' : 'span'"
       class="vp-changelog-hash"
@@ -41,24 +41,29 @@ const authors = [props.item.author, ...props.item.coAuthors?.map(c => c.name) ??
 
 <style scoped>
 .vp-changelog-icon {
-  content: '';
-  top: 3px;
-  left: 0;
   display: inline-block;
-  width: 1.25em;
-  height: 1.25em;
+  vertical-align: middle;
+  width: 1.75rem;
+  height: 1.25rem;
+  flex-shrink: 0;
   background-color: currentcolor;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 12a3 3 0 1 0 6 0a3 3 0 1 0-6 0m3-9v6m0 6v6'/%3E%3C/svg%3E") no-repeat;
   mask-size: 100% 100%;
+  opacity: 30%;
 }
 
-.vp-changelog-item-commit > * {
-    margin-inline-end: 8px;
+.vp-changelog-item-commit {
+  display: flex;
+  gap: 0.25rem;
 }
 
 .vp-changelog-details > * {
-  margin-inline-end: 8px;
+  margin-inline-end: 0.5rem;
+}
+.vp-changelog-details {
+
   align-items: center;
+  vertical-align: baseline;
 }
 
 .vp-changelog-date {

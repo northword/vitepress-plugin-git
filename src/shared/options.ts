@@ -25,7 +25,6 @@ export interface GitChangelogClientOptions {
 
 export interface GitContributorsClientOptions {
   hideHeader?: boolean
-  avatar?: boolean
   hideEmptyText?: boolean
 }
 
