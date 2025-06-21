@@ -1,3 +1,5 @@
+// TODO: Migrate to VueUse if https://github.com/vueuse/vueuse/pull/4821 could merge
+
 import { useNow } from '@vueuse/core'
 import { useData } from 'vitepress'
 import { computed } from 'vue'
@@ -47,10 +49,10 @@ export function useTimeAgoIntl(
   } = options
 
   const { lang } = useData()
-  const rtf = new Intl.RelativeTimeFormat(lang.value, formatOptions)
   const now = useNow({ interval: updateInterval, controls: false })
 
   return computed(() => {
+    const rtf = new Intl.RelativeTimeFormat(lang.value, formatOptions)
     const from = new Date(time).getTime()
     const to = now.value.getTime()
     const diff = from - to
