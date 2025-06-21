@@ -11,26 +11,24 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/northword/vitepress-plugin-git' },
     ],
-    nav: [
-      { text: 'Guide', link: '/getting-started' },
-      { text: 'Example', link: '/example' },
-    ],
     sidebar: [
       {
         text: 'Guide',
         items: [
           { text: 'Getting Started', link: '/getting-started' },
+          { text: 'Config', link: '/options' },
+          { text: 'Secondary Development', link: '/secondary-development' },
         ],
       },
-      {
-        text: 'Example',
-        items: [
-          { text: 'Default', link: '/example/index' },
-          { text: 'Disable Contributors', link: '/example/disable-contributors' },
-          { text: 'Disable Changelog', link: '/example/disable-changelog' },
-          { text: 'Chinese', link: '/example/lang-zh' },
-        ],
-      },
+      // {
+      //   text: 'Example',
+      //   items: [
+      //     { text: 'Default', link: '/example/index' },
+      //     { text: 'Disable Contributors', link: '/example/disable-contributors' },
+      //     { text: 'Disable Changelog', link: '/example/disable-changelog' },
+      //     { text: 'Chinese', link: '/example/lang-zh' },
+      //   ],
+      // },
     ],
 
   },
