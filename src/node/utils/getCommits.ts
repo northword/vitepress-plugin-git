@@ -22,11 +22,16 @@ function getCoAuthorsFromCommitBody(body: string): Pick<GitContributorData, 'ema
     : []
 }
 
+const cache = new Map<string, RawCommit[]>()
+
 /**
  * Get raw commits for a specific file
  *
  */
 export async function getRawCommits(filepath: string): Promise<RawCommit[]> {
+  if (cache.has(filepath))
+    return cache.get(filepath)!
+
   const fileDir = dirname(filepath)
   const fileName = basename(filepath)
 
@@ -69,7 +74,7 @@ export async function getRawCommits(filepath: string): Promise<RawCommit[]> {
     fileDir,
   )
     .then((stdout) => {
-      return stdout
+      const result = stdout
       // remove "[GIT_LOG_COMMIT_END]" in last line: split stdout into lines and avoid empty strings
         .substring(0, stdout.length - COMMIT_SPLITTER.length - 1)
         .split(`${COMMIT_SPLITTER}\n`)
@@ -97,6 +102,8 @@ export async function getRawCommits(filepath: string): Promise<RawCommit[]> {
             coAuthors: getCoAuthorsFromCommitBody(body),
           }
         })
+      cache.set(filepath, result)
+      return result
     })
     .catch((error) => {
       logger.error(`Failed to get commits for ${fileName} in ${fileDir}: ${error}`)
