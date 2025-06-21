@@ -9,9 +9,9 @@
   "keywords": [],
   "main": "index.js",
   "devDependencies": {
-    "@iconify-json/devicon": "^1.1.50",
-    "@shikijs/vitepress-twoslash": "^1.17.6",
-    "vite-plugin-inspect": "^11.0.1",
+    "@iconify-json/devicon": "^1.2.29",
+    "@shikijs/vitepress-twoslash": "^3.7.0",
+    "vite-plugin-inspect": "^11.2.0",
     "vitepress-plugin-git": "workspace:*",
     "vitepress-plugin-group-icons": "^1.6.0"
   }
