@@ -11,7 +11,10 @@ interface ReturnType {
 
 export function useContributors(): ReturnType {
   const { page } = useData()
-  const contributors = computed(() => page.value.git.contributors ?? [])
+
+  const contributors = computed(() => {
+    return (page.value.git.contributors ?? []).toSorted((a, b) => b.commits - a.commits)
+  })
 
   function getContributor(name: string): GitContributorData {
     return contributors.value.find(c => c.name === name) ?? { name, email: '', commits: 1 }
