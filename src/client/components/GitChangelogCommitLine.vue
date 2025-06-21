@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import type { GitChangelogItem } from '../composables/useChangelog'
-import { useLocale } from '../composables'
+import { useContributors, useLocale } from '../composables'
 import Authors from './Authors.vue'
 
-defineProps<{
+const props = defineProps<{
   item: GitChangelogItem
   inlineAuthors?: boolean
   numCommitHashLetters?: number
 }>()
 
 const locale = useLocale()
+const { getContributors } = useContributors()
+
+const authors = [props.item.author, ...props.item.coAuthors?.map(c => c.name) ?? []]
 </script>
 
 <template>
@@ -27,7 +30,7 @@ const locale = useLocale()
     <span class="vp-changelog-divider">-</span>
     <span class="vp-changelog-details">
       <span class="vp-changelog-message" v-html="item.message" />
-      <Authors v-if="inlineAuthors" class="vp-changelog-inline-contributors" :authors="[{ name: item.author }]" mode="inline" />
+      <Authors v-if="inlineAuthors" class="vp-changelog-inline-contributors" :authors="getContributors(authors)" mode="inline" />
       <span class="vp-changelog-date" data-allow-mismatch>
         {{ locale.timeOn }}
         <time :datetime="new Date(item.time).toISOString()">{{ item.date }}</time>
@@ -54,7 +57,8 @@ const locale = useLocale()
 }
 
 .vp-changelog-details > * {
-    margin-inline-end: 8px;
+  margin-inline-end: 8px;
+  align-items: center;
 }
 
 .vp-changelog-date {

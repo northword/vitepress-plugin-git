@@ -4,7 +4,7 @@ import { contributorsOptions as options } from '../options'
 import Authors from './Authors.vue'
 import VPHeader from './VPHeader.vue'
 
-const contributors = useContributors()
+const { contributors } = useContributors()
 const locale = useLocale()
 </script>
 

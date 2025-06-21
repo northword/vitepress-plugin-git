@@ -57,12 +57,12 @@ defineProps<{
 }
 
 .inline {
-display: inline-flex;
+  display: inline-flex;
 }
 
 .inline .avatar {
   border: 2px solid white;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.15rem;
+  height: 1.15rem;
 }
 </style>
